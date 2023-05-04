@@ -1,0 +1,4 @@
+BUTTON_BG_COLOR = "#008B8B"
+APP_BG_COLOR = "#2E2E2E"
+TEXT_1 = "#fff"
+TEXT_2 = "#838ea2"

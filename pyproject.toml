@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "my-stocks"
+version = "0.1.0"
+description = ""
+authors = ["Avinash <avistylein3105@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "~3.11"
+PyQt6 = "6.5.0"
+PySide6 = "6.5.0"
+PySide6-Addons = "6.5.0"
+PySide6-Essentials = "6.5.0"
+QT-PyQt-PySide-Custom-Widgets = "0.6.4"
+yfinance = "^0.2.18"
+forex-python = "^1.8"
+
+[tool.poetry.dev-dependencies]
+black = "^23.3.0"
+pylint = "^2.17.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

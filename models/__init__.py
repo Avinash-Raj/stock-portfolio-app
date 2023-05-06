@@ -6,7 +6,8 @@ from PySide6.QtSql import QSqlDatabase
 from models.model import StockModel
 
 DB = QSqlDatabase.addDatabase("QSQLITE")
-DB.setDatabaseName("example.db")
+DB_NAME = "example.db"
+DB.setDatabaseName(DB_NAME)
 if not DB.open():
     print("Unable to connect to database")
     sys.exit(1)

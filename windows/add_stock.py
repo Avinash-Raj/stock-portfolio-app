@@ -1,74 +1,25 @@
 import logging
-from functools import partial
 from typing import Tuple
 
-from PySide6.QtCore import Qt, QThread, Signal, Slot
 from PySide6.QtGui import QDoubleValidator, QIntValidator
-from PySide6.QtSql import QSqlDatabase
 from PySide6.QtWidgets import QDialog
 
+from models import DB_NAME
 from models.controller import StockModelController
 from utils.validators import is_valid_stock_symbol
-from views.spinner import WaitingSpinner
+from views.spinner import Spinner, spinning
 from windows.messages import show_error_message
 from windows.ui_add_stock_dialog import Ui_Dialog as Ui_AddDialog
 
 
-class MyThread(QThread):
-    finished_signal = Signal(object, bool, str)
-
-    def __init__(self, parent, func, *args, db_name=None, **kwargs):
-        super().__init__(parent)
-        self.func = func
-        self.args = args
-        self.db_name = db_name
-        self.kwargs = kwargs
-        self.db = None
-
-    def run(self):
-        if self.db_name:
-            db = QSqlDatabase.addDatabase("QSQLITE", "my_thread")
-            db.setDatabaseName(self.db_name)
-            if not db.open():
-                print(db.lastError().text())
-            self.db = db
-        result = self.func(*self.args, thread=self, **self.kwargs)
-        self.finished_signal.emit(self.args[0], *result)
-
-
-class spinning:
+def validate_callback(self: "AddStockDialog", is_success: bool, error: str):
     """
-    spinner decorator for instance method which supposed to start spinning at the
-    method start and stops at the end.
+    A spinner callback function which accepts or rejects the add dialog model.
     """
-
-    def __init__(self, f):
-        self.func = f
-
-    def __call__(self, instance, *args, **kwargs):
-        ret = None
-        try:
-            instance.spinner.start()
-            thread = MyThread(instance, self.func, instance, *args, db_name="example.db", **kwargs)
-            thread.finished.connect(lambda: self.processing_finished(instance))
-            thread.finished_signal.connect(self.on_thread_finished)
-            thread.start()
-        except Exception as e:
-            raise e
-        return ret
-
-    @Slot(object)
-    def processing_finished(self, instance):
-        logging.debug("Processing finished!")
-        instance.spinner.stop()
-
-    @Slot(object, bool, str)
-    def on_thread_finished(self, instance, status: bool, error: str):
-        logging.debug("Thread finished")
-        instance.validate_callback(status, error)
-
-    def __get__(self, instance, owner):
-        return partial(self.__call__, instance)
+    if is_success:
+        self.accept()
+    else:
+        show_error_message(error, self)
 
 
 class AddStockDialog(QDialog):
@@ -85,7 +36,7 @@ class AddStockDialog(QDialog):
         self.setup()
 
     def setup(self):
-        self.spinner = WaitingSpinner(self, modality=Qt.WindowModality.ApplicationModal)
+        self.spinner = Spinner(self)
         self.ui.buttonBox.accepted.connect(self.validate_and_accept)
         self.ui.buttonBox.rejected.connect(self.reject)
         self.ui.nameLineEdit.setPlaceholderText("Enter Stock Symbol...")
@@ -104,7 +55,7 @@ class AddStockDialog(QDialog):
         price_validator.setRange(1.0, 500.0)
         self.ui.priceLineEdit.setValidator(price_validator)
 
-    @spinning
+    @spinning(callback=validate_callback, db_name=DB_NAME)
     def validate_and_accept(self, thread=None) -> Tuple[bool, str]:
         # Perform validation on the form fields
         errors = []
@@ -145,12 +96,6 @@ class AddStockDialog(QDialog):
         last_error = thread.db.lastError().text() if (thread and thread.db) else self.parent().model.lastError().text()
         logging.error(f"Failed to add stock, {last_error}")
         return False, last_error
-
-    def validate_callback(self, is_success: bool, error: str):
-        if is_success:
-            self.accept()
-        else:
-            show_error_message(error, self)
 
     def reject(self) -> None:
         # stop the spinner it's still spinning

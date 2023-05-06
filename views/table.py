@@ -1,6 +1,10 @@
-from PySide6.QtCore import QAbstractItemModel, Qt
+import logging
+
+from PySide6.QtCore import QAbstractItemModel, Qt, Slot
 from PySide6.QtGui import QFont, QStandardItem, QStandardItemModel
 from PySide6.QtWidgets import QAbstractItemView, QHeaderView, QTableView
+
+from models import StockModel
 
 
 class BaseTableView(QTableView):
@@ -26,8 +30,17 @@ class BaseTableView(QTableView):
 class StockPortfolioTableView(BaseTableView):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.column_ids_to_hide = [7, 8, 9]
+        self.raw_model = StockModel()
+        self.setModel(self.raw_model)
+        self.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+
+    @Slot(bool)
+    def handle_stock_added_signal(self):
+        logging.debug("Handling Stock Added Signal")
+        logging.debug("Updating the table view.")
+        self.setModel(StockModel())
+        self.viewport().update()
 
     def _convert_to_standard_model(self, model: QAbstractItemModel) -> QStandardItemModel:
         """

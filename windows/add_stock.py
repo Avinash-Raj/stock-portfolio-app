@@ -1,6 +1,7 @@
 import logging
 from typing import Tuple
 
+from PySide6.QtCore import Signal, Slot
 from PySide6.QtGui import QDoubleValidator, QIntValidator
 from PySide6.QtWidgets import QDialog
 
@@ -26,6 +27,8 @@ class AddStockDialog(QDialog):
     """
     Add Stock Dialog.
     """
+
+    stock_added_signal = Signal(bool)
 
     def __init__(self, parent) -> None:
         super().__init__(parent)
@@ -93,7 +96,11 @@ class AddStockDialog(QDialog):
             return True, ""
 
         # Grab the last error
-        last_error = thread.db.lastError().text() if (thread and thread.db) else self.parent().model.lastError().text()
+        last_error = (
+            thread.db.lastError().text()
+            if (thread and thread.db)
+            else self.parent().table_view.model.lastError().text()
+        )
         logging.error(f"Failed to add stock, {last_error}")
         return False, last_error
 
@@ -102,3 +109,9 @@ class AddStockDialog(QDialog):
         if self.spinner.is_spinning:
             self.spinner.stop()
         super().reject()
+
+    def accept(self) -> None:
+        super().accept()
+        # Emit the custom signal with the current count as an argument
+        logging.info("on accept, trigger stock added signal ")
+        self.stock_added_signal.emit(True)

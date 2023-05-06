@@ -1,6 +1,5 @@
 import logging
 from dataclasses import asdict
-from datetime import datetime
 from typing import Any, List, Optional
 
 from PySide6 import QtCore
@@ -45,15 +44,13 @@ class StockModel(QSqlTableModel):
         Slot which was triggered before record update
         """
         logging.debug("Before update slot gets called.")
-        record.setValue("dt_updated", str(datetime.utcnow()).split(".", maxsplit=1)[0])
+        record.setValue("dt_updated", "")
 
     def _before_insert(self, record: QSqlRecord):
         """
         Slot which was triggered before record insert.
         """
         logging.debug("Before insert slot gets called.")
-        record.setValue("dt_created", str(datetime.utcnow()).split(".", maxsplit=1)[0])
-        record.setValue("dt_updated", str(datetime.utcnow()).split(".", maxsplit=1)[0])
 
     def headerData(
         self,
@@ -75,6 +72,9 @@ class StockModel(QSqlTableModel):
         self.insertRows(row, 1)
         for col_name, value in asdict(data).items():
             self.setData(self.index(row, self.fieldIndex(col_name)), value, QtCore.Qt.ItemDataRole.EditRole)
+        current_datetime = QtCore.QDateTime.currentDateTime().toUTC().toString(QtCore.Qt.DateFormat.ISODate)
+        self.setData(self.index(row, self.fieldIndex("dt_created")), current_datetime, QtCore.Qt.ItemDataRole.EditRole)
+        self.setData(self.index(row, self.fieldIndex("dt_updated")), current_datetime, QtCore.Qt.ItemDataRole.EditRole)
         return self.submitAll()
 
     # Custom function to delete a row from the table

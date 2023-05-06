@@ -18,7 +18,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from models import StockModel
+# from models import StockModel
 from slots.receivers import *
 from views import StockPortfolioTableView
 from windows.ui_interface import Ui_MainWindow
@@ -47,11 +47,12 @@ class MainWindow(QMainWindow):
         self.ui.LeftMenuContainer.hide()
         self.ui.stackedWidget.setCurrentWidget(self.ui.portfolio_page)
         # Create the model
-        self.model = StockModel()
+        # self.model = StockModel()
 
         # Create the table view and set the model
         self.table_view = StockPortfolioTableView(self)
-        self.table_view.setModel(self.model)
+        # self.model = self.table_view.model()
+        # self.table_view.setModel(self.model)
 
         # replace the existing tablewidget with the table view
         self.ui.tableFrame.layout().replaceWidget(self.ui.tableWidget, self.table_view)

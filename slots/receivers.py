@@ -63,4 +63,5 @@ def open_settings_page(self):
 
 def open_add_stock_dialog(self):
     dialog = AddStockDialog(self)
+    dialog.stock_added_signal.connect(self.table_view.handle_stock_added_signal)
     dialog.exec()

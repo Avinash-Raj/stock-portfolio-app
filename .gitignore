@@ -22,7 +22,6 @@ ENV/
 
 # IDEs and editors
 .idea/
-.vscode/
 
 # Poetry
 .poetry/

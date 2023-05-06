@@ -1,5 +1,5 @@
-from dataclasses import dataclass, field
-from typing import Union, Optional
+from dataclasses import dataclass
+from typing import Union
 from decimal import Decimal
 from forex_python.converter import CurrencyRates
 
@@ -11,14 +11,12 @@ class StockItem:
     symbol: str
     price_paid: float
     shares: int
-    name: str = field(init=False)
-    price: float = field(init=False)
-    currency: str = field(init=False)
-    cost_basis: float = field(init=False)
-    market_value: float = field(init=False)
-    gain: float = field(init=False)
-    # dt_created: str = field(init=False)
-    # dt_updated: str = field(init=False)
+    name: str
+    price: float
+    currency: str
+    cost_basis: float
+    market_value: float
+    gain: float
 
 
 @dataclass(frozen=True)

@@ -1,6 +1,8 @@
 # Create a connection to the database
 import sys
+
 from PySide6.QtSql import QSqlDatabase
+
 from models.model import StockModel
 
 DB = QSqlDatabase.addDatabase("QSQLITE")

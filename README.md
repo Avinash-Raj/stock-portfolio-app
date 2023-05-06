@@ -1,4 +1,5 @@
-##Stock Portfolio App
+## Stock Portfolio App
+
 This is a simple PyQt6 application that allows users to keep track of the stocks they own and their performance.
 
 #### Features

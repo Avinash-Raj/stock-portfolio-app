@@ -1,5 +1,11 @@
-from entities.classes import StockItem
-from utils.helpers import update_stock_info
+import logging
+from dataclasses import asdict
+from typing import Optional
+
+from PySide6.QtSql import QSqlDatabase
+
+from utils.helpers import create_stock_item
+
 from .model import StockModel
 
 
@@ -9,8 +15,8 @@ class StockModelController:
     This class does the interaction with the Stock DB Model.
     """
 
-    def __init__(self):
-        self.model = StockModel()
+    def __init__(self, db: Optional[QSqlDatabase] = None):
+        self.model = StockModel(db)
 
     def select_rows_by_symbol(self, symbol):
         """
@@ -39,8 +45,11 @@ class StockModelController:
         return row_id
 
     def add_stock_item(self, symbol: str, price: float, quantity: int) -> bool:
-        stock_item = StockItem(symbol=symbol, price_paid=price, shares=quantity)
-        stock_item = update_stock_info(stock_item)
+        stock_item = create_stock_item(symbol, price, quantity)
+        if not stock_item:
+            logging.error(f'Failed to get stock information for "{symbol}"')
+            return False
+        logging.debug(f"Stock Item Info, {asdict(stock_item)}")
         return self.model.addRow(stock_item)
 
     def update_stock_item(self, symbol, column_values: dict) -> bool:

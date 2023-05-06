@@ -1,5 +1,5 @@
-from PySide6.QtWidgets import QDialog
-from PySide6.QtCore import QPropertyAnimation, QEasingCurve, QSize
+from PySide6.QtCore import QPropertyAnimation
+
 from themes.colors import *
 from windows.add_stock import AddStockDialog
 

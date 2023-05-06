@@ -1,14 +1,20 @@
-from typing import List, Any
-from datetime import datetime
+import logging
 from dataclasses import asdict
+from datetime import datetime
+from typing import Any, List, Optional
+
 from PySide6 import QtCore
-from PySide6.QtSql import QSqlTableModel, QSqlRecord
+from PySide6.QtSql import QSqlDatabase, QSqlRecord, QSqlTableModel
+
 from entities import StockItem
 
 
 class StockModel(QSqlTableModel):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, db: Optional[QSqlDatabase] = None):
+        if db:
+            super().__init__(db=db)
+        else:
+            super().__init__()
 
         # Set the table name
         self.setTable("stocks")
@@ -38,12 +44,14 @@ class StockModel(QSqlTableModel):
         """
         Slot which was triggered before record update
         """
+        logging.debug("Before update slot gets called.")
         record.setValue("dt_updated", str(datetime.utcnow()).split(".", maxsplit=1)[0])
 
     def _before_insert(self, record: QSqlRecord):
         """
         Slot which was triggered before record insert.
         """
+        logging.debug("Before insert slot gets called.")
         record.setValue("dt_created", str(datetime.utcnow()).split(".", maxsplit=1)[0])
         record.setValue("dt_updated", str(datetime.utcnow()).split(".", maxsplit=1)[0])
 
@@ -62,10 +70,11 @@ class StockModel(QSqlTableModel):
 
     # Custom function to add a new row to the table
     def addRow(self, data: StockItem) -> bool:
+        logging.debug("Adding a new stock record...")
         row = self.rowCount()
         self.insertRows(row, 1)
-        for i, value in enumerate(asdict(data).items()):
-            self.setData(self.index(row, i), value[1])
+        for col_name, value in asdict(data).items():
+            self.setData(self.index(row, self.fieldIndex(col_name)), value, QtCore.Qt.ItemDataRole.EditRole)
         return self.submitAll()
 
     # Custom function to delete a row from the table

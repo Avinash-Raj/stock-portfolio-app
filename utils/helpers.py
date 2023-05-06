@@ -1,5 +1,41 @@
+from typing import Optional
+from requests.exceptions import RequestException
 from entities import StockItem
 from .get_price import get_stock_info
+
+
+def create_stock_item(symbol: str, price_paid: float, quantity: int) -> Optional[StockItem]:
+    """
+    Helps to create instance of Stock Item class.
+
+    Args:
+        symbol (str): stock symbol
+        price (float): purchase price
+        quantity (int): number of shares
+    """
+    try:
+        info = get_stock_info(stock_symbol=symbol)
+    except RequestException:
+        return None
+    if "shortName" not in info:
+        return None
+
+    cost_basis = price_paid * quantity
+    market_value = info["currentPrice"] * quantity
+    gain = market_value - cost_basis
+    return StockItem(
+        **{
+            "symbol": symbol,
+            "price_paid": price_paid,
+            "shares": quantity,
+            "name": info["shortName"],
+            "price": info["currentPrice"],
+            "currency": info["currency"],
+            "cost_basis": cost_basis,
+            "market_value": market_value,
+            "gain": gain,
+        }
+    )
 
 
 def update_stock_info(stock: StockItem) -> StockItem:

@@ -1,31 +1,27 @@
+from PySide6.QtCore import QEasingCurve, QParallelAnimationGroup, QPropertyAnimation, QSize, Qt
+from PySide6.QtGui import QColor, QFont
 from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
     QComboBox,
+    QGraphicsDropShadowEffect,
+    QGraphicsOpacityEffect,
+    QHeaderView,
     QLabel,
     QLineEdit,
     QMainWindow,
     QPlainTextEdit,
     QPushButton,
     QSpinBox,
+    QTableView,
     QVBoxLayout,
     QWidget,
-    QTableView,
-    QGraphicsOpacityEffect,
-    QGraphicsDropShadowEffect,
-    QHeaderView,
 )
-from PySide6.QtCore import (
-    QPropertyAnimation,
-    QEasingCurve,
-    QParallelAnimationGroup,
-    QSize,
-    Qt,
-)
-from PySide6.QtGui import QColor
-from windows.ui_interface import Ui_MainWindow
+
+from models import StockModel
 from slots.receivers import *
-from models import DB, StockModel
+from views import StockPortfolioTableView
+from windows.ui_interface import Ui_MainWindow
 
 
 class MainWindow(QMainWindow):
@@ -47,25 +43,21 @@ class MainWindow(QMainWindow):
         """
         Default actions at the first place.
         """
-        self.setAttribute(Qt.WA_DeleteOnClose)
+        self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
         self.ui.LeftMenuContainer.hide()
         self.ui.stackedWidget.setCurrentWidget(self.ui.portfolio_page)
         # Create the model
         self.model = StockModel()
-        column_ids_to_hide = [7, 8, 9]
 
         # Create the table view and set the model
-        self.table_view = QTableView(self)
+        self.table_view = StockPortfolioTableView(self)
         self.table_view.setModel(self.model)
-        for id in column_ids_to_hide:
-            self.table_view.hideColumn(id)
 
         # replace the existing tablewidget with the table view
         self.ui.tableFrame.layout().replaceWidget(self.ui.tableWidget, self.table_view)
         # Set the last header to horizontally stretch to fill the remaining space
         header = self.table_view.horizontalHeader()
         header.setStretchLastSection(True)
-        # header.setSectionResizeMode(QHeaderView.ResizeToContents)
 
     def setup_animation(self, widget: QWidget):
         """
@@ -80,7 +72,7 @@ class MainWindow(QMainWindow):
         self.opacity_animation.setDuration(250)
         self.opacity_animation.setStartValue(0.0)
         self.opacity_animation.setEndValue(1.0)
-        self.opacity_animation.setEasingCurve(QEasingCurve.OutQuad)
+        self.opacity_animation.setEasingCurve(QEasingCurve.Type.OutQuad)
 
         # self.minimum_width_animation = QPropertyAnimation(self.ui.LeftMenuContainer, b"minimumwidth")
         # self.minimum_width_animation.setDuration(500)

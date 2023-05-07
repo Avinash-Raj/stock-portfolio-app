@@ -82,6 +82,26 @@ class StockModel(QSqlTableModel):
         self.removeRow(index)
         return self.submitAll()
 
+    def select_rows_by_ids(self, ids_to_select: List[int], reset_filter=True) -> List[int]:
+        ids = ",".join([str(i) for i in ids_to_select])
+        # Set the filter on the model to display only records with the specified IDs
+        self.setFilter(f"id IN ({ids})")
+        record_ids = []
+        if self.select() and self.rowCount() > 0:
+            for i in range(self.rowCount()):
+                record_ids.append(i)
+        if reset_filter:
+            self.setFilter("")
+        return record_ids
+
+    def delete_rows_by_ids(self, ids_to_delete: List[int]):
+        return self.deleteRows(self.select_rows_by_ids(ids_to_delete, reset_filter=False))
+
+    def deleteRows(self, ids: List[int]) -> bool:
+        for i in ids:
+            self.removeRow(i)
+        return self.submitAll()
+
     # list rows
     def listRows(self) -> List[Any]:
         """_

@@ -3,6 +3,7 @@ import sys
 
 from PySide6.QtSql import QSqlDatabase
 
+from models.controller import StockModelController
 from models.model import StockModel
 
 DB = QSqlDatabase.addDatabase("QSQLITE")
@@ -12,4 +13,4 @@ if not DB.open():
     print("Unable to connect to database")
     sys.exit(1)
 
-__all__ = ["DB", "StockModel"]
+__all__ = ["DB", "StockModel", "StockModelController"]

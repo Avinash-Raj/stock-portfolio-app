@@ -1,6 +1,6 @@
 import logging
 from dataclasses import asdict
-from typing import Optional
+from typing import List, Optional
 
 from PySide6.QtSql import QSqlDatabase
 
@@ -69,3 +69,8 @@ class StockModelController:
         # clear filter
         self.model.setFilter("")
         return is_deleted
+
+    def remove_stocks(self, ids: List[int]) -> bool:
+        result = self.model.delete_rows_by_ids(ids)
+        self.model.setFilter("")
+        return result

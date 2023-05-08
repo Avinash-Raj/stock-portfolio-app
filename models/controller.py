@@ -1,10 +1,11 @@
 import logging
 from dataclasses import asdict
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 from PySide6.QtSql import QSqlDatabase
 
-from utils.helpers import create_stock_item
+from entities import StockItem
+from utils.helpers import create_stock_item, update_stock_info
 
 from .model import StockModel
 
@@ -74,3 +75,27 @@ class StockModelController:
         result = self.model.delete_rows_by_ids(ids)
         self.model.setFilter("")
         return result
+
+    # def update_stocks(self, )
+    def refresh_stocks(self):
+        """
+        Helps to refresh all the stocks ie, update it's current_pricem cost_babis and gain.
+        """
+        out: Dict[int, Dict[str, Any]] = {}
+        columns_to_update = ["price", "cost_basis", "market_value", "gain"]
+        for row in self.model.listRows():
+            row_id = row["id"]
+            item = StockItem(**row)
+            updated_item = update_stock_info(item)
+            values_dict = {}
+            for col in columns_to_update:
+                values_dict[col] = getattr(updated_item, col)
+            out[row_id] = values_dict
+        status = True
+        for row_id, err in self.model.updateRows(out).items():
+            if err:
+                status = False
+                logging.error(f"Failed to refresh stock id {row_id}, {err}")
+            else:
+                logging.debug(f"Stock id {row_id} updated successfully.")
+        return status

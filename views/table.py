@@ -1,11 +1,15 @@
 import logging
 from typing import List
 
-from PySide6.QtCore import QAbstractItemModel, Qt, Slot
+from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QAction, QContextMenuEvent, QFont, QStandardItem, QStandardItemModel
+from PySide6.QtSql import QSqlTableModel
 from PySide6.QtWidgets import QAbstractItemView, QHeaderView, QMenu, QTableView
 
+from entities.classes import CURRENCIES
 from models import StockModel, StockModelController
+from settings import PORTFOLIO_TABLE_AMOUNT_COLUMN_NAMES, PORTFOLIO_TABLE_COLUMN_NAMES_TO_HIDE
+from themes.colors import TABLE_CELL_GREEN_BACKGROUND_COLOR, TABLE_CELL_RED_BACKGROUND_COLOR
 
 
 class BaseTableView(QTableView):
@@ -16,7 +20,7 @@ class BaseTableView(QTableView):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         # Set the font for the rows in the table
-        row_font = QFont("Tahoma", 12)
+        row_font = QFont("Arial", 12)
         self.setFont(row_font)
 
     def horizontalHeader(self) -> QHeaderView:
@@ -31,7 +35,6 @@ class BaseTableView(QTableView):
 class StockPortfolioTableView(BaseTableView):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.column_ids_to_hide = [7, 8, 9]
         self.model_cls = StockModel
         self.setModel(self.model_cls())
         self.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
@@ -85,29 +88,51 @@ class StockPortfolioTableView(BaseTableView):
     def contextMenuEvent(self, event: QContextMenuEvent):
         self.menu.exec(event.globalPos())
 
-    def _convert_to_standard_model(self, model: QAbstractItemModel) -> QStandardItemModel:
+    def _convert_to_standard_model(self, model: QSqlTableModel) -> QStandardItemModel:
         """
         Convert QAbstractItemModel to QStandardItemModel
         """
         standard_model = QStandardItemModel()
         standard_model.setColumnCount(model.columnCount())
         standard_model.setRowCount(model.rowCount())
+        amount_column_indexes = [model.fieldIndex(i) for i in PORTFOLIO_TABLE_AMOUNT_COLUMN_NAMES]
 
         for i in range(model.columnCount()):
             # Set header data for QStandardItemModel
             header_item = QStandardItem(model.headerData(i, Qt.Orientation.Horizontal))
             standard_model.setHorizontalHeaderItem(i, header_item)
+            is_amount_column = bool(i in amount_column_indexes)
+            is_gain_column = i == model.fieldIndex("gain")
 
             for j in range(model.rowCount()):
-                item = QStandardItem()
                 value = model.data(model.index(j, i))
+                preceeding_text = ""
+                if is_amount_column:
+                    currency_code = model.data(model.index(j, model.fieldIndex("currency")))
+                    currency_symbol = CURRENCIES[currency_code].symbol
+                    preceeding_text = f"{currency_symbol} "
+                value = f"{preceeding_text}{value}"
+                item = QStandardItem()
                 item.setData(value, Qt.ItemDataRole.DisplayRole)
                 item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                # set font for all amount columns
+                if is_amount_column:
+                    item.setFont(QFont("Arial", 12))
+                # set background if in case of gain column
+                if is_gain_column:
+                    if "-" in value:
+                        # loss
+                        item.setBackground(TABLE_CELL_RED_BACKGROUND_COLOR)
+                    else:
+                        # gain
+                        item.setBackground(TABLE_CELL_GREEN_BACKGROUND_COLOR)
+                    item.setForeground(Qt.GlobalColor.black)
                 standard_model.setItem(j, i, item)
 
         return standard_model
 
-    def setModel(self, model: QAbstractItemModel) -> None:
+    def setModel(self, model: QSqlTableModel) -> None:
         super().setModel(self._convert_to_standard_model(model))
+        self.column_ids_to_hide = [model.fieldIndex(i) for i in PORTFOLIO_TABLE_COLUMN_NAMES_TO_HIDE]
         for colid in self.column_ids_to_hide:
             self.hideColumn(colid)

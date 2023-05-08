@@ -1,6 +1,8 @@
-from PySide6.QtCore import QPropertyAnimation
+from PySide6.QtCore import QPropertyAnimation, QThread
 
+from actions.stock_refresh import RefreshStock
 from themes.colors import *
+from views.spinner import SpinningWorker
 from windows.add_stock import AddStockDialog
 
 
@@ -65,3 +67,15 @@ def open_add_stock_dialog(self):
     dialog = AddStockDialog(self)
     dialog.stock_added_signal.connect(self.table_view.handle_stock_added_signal)
     dialog.exec()
+
+
+def refresh_stocks(self):
+    # worker = SpinningWorker(self)
+    # thread = QThread()
+    # worker.moveToThread(thread)
+    # thread.started.connect(worker.run)
+    # worker.finished.connect(thread.quit)
+    # worker.finished.connect(worker.deleteLater)
+    # thread.finished.connect(thread.deleteLater)
+    # thread.start()
+    RefreshStock(self).refresh()

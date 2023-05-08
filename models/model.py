@@ -1,6 +1,6 @@
 import logging
 from dataclasses import asdict
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 from PySide6 import QtCore
 from PySide6.QtSql import QSqlDatabase, QSqlRecord, QSqlTableModel
@@ -21,7 +21,7 @@ class StockModel(QSqlTableModel):
         self._header = [
             "ID",
             "Name",
-            "Price",
+            "Current Price",
             "Shares",
             "Cost Basis",
             "Market Value",
@@ -51,6 +51,9 @@ class StockModel(QSqlTableModel):
         Slot which was triggered before record insert.
         """
         logging.debug("Before insert slot gets called.")
+        # turn symbol to upper case
+        symbol = record.value("symbol").upper()
+        record.setValue("symbol", symbol)
 
     def headerData(
         self,
@@ -103,7 +106,7 @@ class StockModel(QSqlTableModel):
         return self.submitAll()
 
     # list rows
-    def listRows(self) -> List[Any]:
+    def listRows(self) -> List[Dict]:
         """_
         suppossed list all the rows.
         """
@@ -113,7 +116,7 @@ class StockModel(QSqlTableModel):
             record = {}
             for column in range(self.columnCount()):
                 value = self.data(self.index(row, column))
-                record[self.headerData(column)] = value
+                record[self.headerData(column, role=QtCore.Qt.ItemDataRole.EditRole)] = value
             records.append(record)
         return records
 
@@ -142,3 +145,29 @@ class StockModel(QSqlTableModel):
         self.updateRowInTable(row_index, record)
         # call submitAll to submit the changes to the database
         return self.submitAll()
+
+    def updateRows(self, data: Dict[int, Dict[str, Any]]) -> Dict[int, str]:
+        # Update the records
+        output: Dict[int, str] = {}
+        self.setFilter(f"id IN ({data.keys()})")
+        self.select()
+        for record_id, update_data in data.items():
+            # Find the index of the record to update
+            for row in range(self.rowCount()):
+                index = self.index(row, 0)  # Assumes ID is in the first column
+                if index.data() == record_id:
+                    # Update the columns
+                    for column_name, value in update_data.items():
+                        column_index = self.fieldIndex(column_name)
+                        self.setData(index.siblingAtColumn(column_index), value, role=QtCore.Qt.ItemDataRole.EditRole)
+
+                    # Save the changes
+                    if self.submitAll():
+                        output[record_id] = ""
+                    else:
+                        output[record_id] = self.lastError().text()
+                    break  # Exit the inner loop
+        # reset filter
+        self.setFilter("")
+
+        return output

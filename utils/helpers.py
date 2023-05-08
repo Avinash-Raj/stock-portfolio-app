@@ -1,6 +1,10 @@
+from decimal import Decimal
 from typing import Optional
+
 from requests.exceptions import RequestException
+
 from entities import StockItem
+
 from .get_price import get_stock_info
 
 
@@ -31,9 +35,9 @@ def create_stock_item(symbol: str, price_paid: float, quantity: int) -> Optional
             "name": info["shortName"],
             "price": info["currentPrice"],
             "currency": info["currency"],
-            "cost_basis": cost_basis,
-            "market_value": market_value,
-            "gain": gain,
+            "cost_basis": round(cost_basis, 2),
+            "market_value": round(market_value),
+            "gain": round(gain, 2),
         }
     )
 
@@ -53,8 +57,8 @@ def update_stock_info(stock: StockItem) -> StockItem:
     gain = market_value - cost_basis
     stock.name = name
     stock.price = price
-    stock.cost_basis = cost_basis
-    stock.market_value = market_value
+    stock.cost_basis = round(cost_basis, 2)
+    stock.market_value = round(market_value, 2)
     stock.currency = currency
-    stock.gain = gain
+    stock.gain = round(gain, 2)
     return stock

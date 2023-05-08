@@ -96,3 +96,4 @@ class MainWindow(QMainWindow):
         self.ui.settingsBtn.clicked.connect(lambda: open_settings_page(self))
         self.ui.helpBtn.clicked.connect(lambda: open_help_page(self))
         self.ui.addBtn.clicked.connect(lambda: open_add_stock_dialog(self))
+        self.ui.refreshBtn.clicked.connect(lambda: refresh_stocks(self))

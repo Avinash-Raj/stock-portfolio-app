@@ -6,7 +6,7 @@ import logging
 import math
 from typing import Callable, Optional
 
-from PySide6.QtCore import QRect, Qt, QThread, QTimer, Signal, Slot
+from PySide6.QtCore import QObject, QRect, Qt, QThread, QTimer, Signal, Slot
 from PySide6.QtGui import QColor, QPainter, QPaintEvent
 from PySide6.QtSql import QSqlDatabase
 from PySide6.QtWidgets import QWidget
@@ -324,9 +324,13 @@ class spinning:
 
     def __call__(self, func):
         def wrapper(instance, *args, **kwargs):
+            assert instance.spinner, "spinner member unavailable"
             ret = None
             try:
-                thread = SpinningThread(instance, func, instance, *args, db_name=self.db_name, **kwargs)
+                # spinner parent should be same as thread parent
+                thread = SpinningThread(
+                    instance.spinner.parent(), func, instance, *args, db_name=self.db_name, **kwargs
+                )
                 thread.started.connect(lambda: self.on_thread_started(instance))
                 thread.finished.connect(lambda: self.on_thread_finished(instance))
                 thread.finished_signal.connect(self.processing_finished)
@@ -370,3 +374,31 @@ class Spinner(WaitingSpinner):
             radius=20,
             color=QColor(Qt.GlobalColor.cyan),
         )
+
+
+class SpinningWorker(QObject):
+    finished = Signal()
+    stop_signal = Signal()
+
+    # def __init__(self, *args, **kwargs) -> None:
+    #     super().__init__(*args, **kwargs)
+    # self.spinner = spinner
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent)
+        self.stop_signal.connect(self.stop)
+
+    @Slot()
+    def run(self, parent):
+        logging.info("Worker started!")
+        self.spinner = Spinner(parent=parent)
+        self.spinner.start()
+        print("spinner started")
+        while True:
+            QThread.msleep(500)
+            self.stop()
+
+    @Slot()
+    def stop(self):
+        self.spinner.stop()
+        print("spinner stopped")
+        self.finished.emit()

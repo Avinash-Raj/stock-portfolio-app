@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from typing import Union
 from decimal import Decimal
+from typing import Union
+
 from forex_python.converter import CurrencyRates
 
 
@@ -17,6 +18,23 @@ class StockItem:
     cost_basis: float
     market_value: float
     gain: float
+
+    # def __init__(self, **kwargs):
+    #     expected_args = set(vars(self))  # get the expected arguments
+    #     valid_kwargs = {k: v for k, v in kwargs.items() if k in expected_args}  # filter out any unexpected arguments
+    #     vars(self).update(valid_kwargs)
+    def __init__(
+        self, symbol, price_paid, shares, name, price, currency, cost_basis, market_value, gain, *args, **kwargs
+    ):
+        self.symbol = symbol
+        self.price_paid = price_paid
+        self.shares = shares
+        self.name = name
+        self.price = price
+        self.currency = currency
+        self.cost_basis = cost_basis
+        self.market_value = market_value
+        self.gain = gain
 
 
 @dataclass(frozen=True)
@@ -48,3 +66,6 @@ class Amount:
         currency = to_currency if isinstance(to_currency, Currency) else CURRENCIES[to_currency]
         final_amount = currency_rate.convert(self.currency.code, currency.code, self.price)
         return Amount(price=final_amount, currency=currency)
+
+    def __str__(self):
+        return f"{self.currency.symbol} {self.price}"

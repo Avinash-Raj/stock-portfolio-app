@@ -1,3 +1,5 @@
+import logging
+
 from PySide6.QtCore import QEasingCurve, QParallelAnimationGroup, QPropertyAnimation, QSize, Qt
 from PySide6.QtGui import QColor, QFont
 from PySide6.QtWidgets import (
@@ -17,6 +19,8 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+
+from actions import SpinnerBase
 
 # from models import StockModel
 from slots.receivers import *
@@ -97,3 +101,8 @@ class MainWindow(QMainWindow):
         self.ui.helpBtn.clicked.connect(lambda: open_help_page(self))
         self.ui.addBtn.clicked.connect(lambda: open_add_stock_dialog(self))
         self.ui.refreshBtn.clicked.connect(lambda: refresh_stocks(self))
+
+    def after_stock_refresh(self, action_instance: "SpinnerBase", status: bool, error: str):
+        if status:
+            logging.info("Stocks refreshed and table reloaded!")
+            self.table_view.reload_table()

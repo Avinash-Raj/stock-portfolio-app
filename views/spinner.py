@@ -6,7 +6,7 @@ import logging
 import math
 from typing import Callable, Optional
 
-from PySide6.QtCore import QObject, QRect, Qt, QThread, QTimer, Signal, Slot
+from PySide6.QtCore import QCoreApplication, QObject, QRect, Qt, QThread, QTimer, Signal, Slot
 from PySide6.QtGui import QColor, QPainter, QPaintEvent
 from PySide6.QtSql import QSqlDatabase
 from PySide6.QtWidgets import QWidget
@@ -354,8 +354,10 @@ class spinning:
     @Slot(object, bool, str)
     def processing_finished(self, instance, status: bool, error: str):
         logging.debug("Thread processing finished!")
-        if self.callback:
-            self.callback(instance, status, error)
+        callback = self.callback or instance.callback
+        if callback:
+            logging.debug("Calling callback function...")
+            callback(instance, status, error)
 
 
 class Spinner(WaitingSpinner):
@@ -376,6 +378,7 @@ class Spinner(WaitingSpinner):
         )
 
 
+# @obsolete
 class SpinningWorker(QObject):
     finished = Signal()
     stop_signal = Signal()

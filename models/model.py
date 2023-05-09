@@ -149,18 +149,23 @@ class StockModel(QSqlTableModel):
     def updateRows(self, data: Dict[int, Dict[str, Any]]) -> Dict[int, str]:
         # Update the records
         output: Dict[int, str] = {}
-        self.setFilter(f"id IN ({data.keys()})")
+        keys = ",".join([str(i) for i in data.keys()])
+        self.setFilter(f"id IN ({keys})")
         self.select()
         for record_id, update_data in data.items():
             # Find the index of the record to update
             for row in range(self.rowCount()):
                 index = self.index(row, 0)  # Assumes ID is in the first column
                 if index.data() == record_id:
+                    logging.debug(f"Going to update record id {record_id}")
+                    # get the record
+                    record = self.record(row)
                     # Update the columns
                     for column_name, value in update_data.items():
-                        column_index = self.fieldIndex(column_name)
-                        self.setData(index.siblingAtColumn(column_index), value, role=QtCore.Qt.ItemDataRole.EditRole)
-
+                        # column_index = self.fieldIndex(column_name)
+                        # self.setData(index.siblingAtColumn(column_index), value, role=QtCore.Qt.ItemDataRole.EditRole)
+                        record.setValue(column_name, value)
+                    self.setRecord(row, record)
                     # Save the changes
                     if self.submitAll():
                         output[record_id] = ""

@@ -92,10 +92,12 @@ class StockModelController:
                 values_dict[col] = getattr(updated_item, col)
             out[row_id] = values_dict
         status = True
+        error = ""
         for row_id, err in self.model.updateRows(out).items():
             if err:
                 status = False
-                logging.error(f"Failed to refresh stock id {row_id}, {err}")
+                logging.debug(f"Failed to refresh stock id {row_id}, {err}")
+                error += err
             else:
                 logging.debug(f"Stock id {row_id} updated successfully.")
-        return status
+        return status, error

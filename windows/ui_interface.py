@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'interfacexYPGnb.ui'
+## Form generated from reading UI file 'interfaceMenjWM.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.4.3
 ##
@@ -53,7 +53,7 @@ class Ui_MainWindow(object):
 "	background-color: #008B8B;\n"
 "}\n"
 "#menuFrame {\n"
-"  border-bottom: 1px solid #fff;\n"
+"  border-bottom: 3px solid #fff;\n"
 "}\n"
 "\n"
 "#setting_frame,#help_frame {\n"
@@ -80,6 +80,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2 = QHBoxLayout(self.centralwidget)
         self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.horizontalLayout_2.setContentsMargins(0, 1, 0, 0)
         self.LeftMenuContainer = QWidget(self.centralwidget)
         self.LeftMenuContainer.setObjectName(u"LeftMenuContainer")
         sizePolicy = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Preferred)
@@ -87,6 +88,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.LeftMenuContainer.sizePolicy().hasHeightForWidth())
         self.LeftMenuContainer.setSizePolicy(sizePolicy)
+        self.LeftMenuContainer.setMaximumSize(QSize(150, 16777215))
         self.verticalLayout = QVBoxLayout(self.LeftMenuContainer)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, -1, 0, -1)
@@ -97,30 +99,41 @@ class Ui_MainWindow(object):
         sizePolicy1.setVerticalStretch(3)
         sizePolicy1.setHeightForWidth(self.LeftMenuSubContainer.sizePolicy().hasHeightForWidth())
         self.LeftMenuSubContainer.setSizePolicy(sizePolicy1)
-        self.LeftMenuSubContainer.setMaximumSize(QSize(16777215, 16777215))
+        self.LeftMenuSubContainer.setMaximumSize(QSize(150, 16777215))
         self.LeftMenuSubContainer.setSizeIncrement(QSize(-1, 0))
         self.LeftMenuSubContainer.setBaseSize(QSize(0, -1))
         self.verticalLayout_2 = QVBoxLayout(self.LeftMenuSubContainer)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout_2.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.verticalLayout_2.setContentsMargins(-1, 0, -1, 0)
+        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.closeFrame = QFrame(self.LeftMenuSubContainer)
         self.closeFrame.setObjectName(u"closeFrame")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy2.setHorizontalStretch(1)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.closeFrame.sizePolicy().hasHeightForWidth())
+        self.closeFrame.setSizePolicy(sizePolicy2)
         self.closeFrame.setFrameShape(QFrame.StyledPanel)
         self.closeFrame.setFrameShadow(QFrame.Raised)
         self.verticalLayout_13 = QVBoxLayout(self.closeFrame)
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
+        self.verticalLayout_13.setContentsMargins(0, 0, 0, 0)
         self.menuClose = QPushButton(self.closeFrame)
         self.menuClose.setObjectName(u"menuClose")
+        sizePolicy3 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        sizePolicy3.setHorizontalStretch(1)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.menuClose.sizePolicy().hasHeightForWidth())
+        self.menuClose.setSizePolicy(sizePolicy3)
         icon = QIcon()
         icon.addFile(u":/icons/sample-qt/icons/x-circle.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.menuClose.setIcon(icon)
         self.menuClose.setIconSize(QSize(24, 24))
 
-        self.verticalLayout_13.addWidget(self.menuClose)
+        self.verticalLayout_13.addWidget(self.menuClose, 0, Qt.AlignLeft)
 
 
-        self.verticalLayout_2.addWidget(self.closeFrame, 0, Qt.AlignHCenter)
+        self.verticalLayout_2.addWidget(self.closeFrame, 0, Qt.AlignHCenter|Qt.AlignTop)
 
         self.menuFrame = QFrame(self.LeftMenuSubContainer)
         self.menuFrame.setObjectName(u"menuFrame")
@@ -138,7 +151,7 @@ class Ui_MainWindow(object):
         self.frame_2.setFrameShadow(QFrame.Raised)
         self.verticalLayout_4 = QVBoxLayout(self.frame_2)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.verticalLayout_4.setContentsMargins(-1, 0, -1, -1)
+        self.verticalLayout_4.setContentsMargins(12, 0, 0, -1)
         self.portfolioBtn = QPushButton(self.frame_2)
         self.portfolioBtn.setObjectName(u"portfolioBtn")
         icon1 = QIcon()
@@ -153,11 +166,11 @@ class Ui_MainWindow(object):
 
         self.frame_3 = QFrame(self.LeftMenuSubContainer)
         self.frame_3.setObjectName(u"frame_3")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.frame_3.sizePolicy().hasHeightForWidth())
-        self.frame_3.setSizePolicy(sizePolicy2)
+        sizePolicy4 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.frame_3.sizePolicy().hasHeightForWidth())
+        self.frame_3.setSizePolicy(sizePolicy4)
         self.frame_3.setFrameShape(QFrame.StyledPanel)
         self.frame_3.setFrameShadow(QFrame.Raised)
         self.verticalLayout_5 = QVBoxLayout(self.frame_3)
@@ -200,11 +213,11 @@ class Ui_MainWindow(object):
 
         self.MainBodyContainer = QWidget(self.centralwidget)
         self.MainBodyContainer.setObjectName(u"MainBodyContainer")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy3.setHorizontalStretch(1)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.MainBodyContainer.sizePolicy().hasHeightForWidth())
-        self.MainBodyContainer.setSizePolicy(sizePolicy3)
+        sizePolicy5 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy5.setHorizontalStretch(1)
+        sizePolicy5.setVerticalStretch(0)
+        sizePolicy5.setHeightForWidth(self.MainBodyContainer.sizePolicy().hasHeightForWidth())
+        self.MainBodyContainer.setSizePolicy(sizePolicy5)
         self.MainBodyContainer.setStyleSheet(u"#tableContainer {\n"
 "background-color: #2E2E2E;\n"
 "border: none;\n"
@@ -229,7 +242,7 @@ class Ui_MainWindow(object):
         self.tableContainer.setObjectName(u"tableContainer")
         self.verticalLayout_7 = QVBoxLayout(self.tableContainer)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.verticalLayout_7.setContentsMargins(0, 12, 0, 0)
+        self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
         self.topBarFrame = QFrame(self.tableContainer)
         self.topBarFrame.setObjectName(u"topBarFrame")
         self.topBarFrame.setMaximumSize(QSize(16777215, 16777215))
@@ -301,6 +314,7 @@ class Ui_MainWindow(object):
         self.frame_pages.setFrameShadow(QFrame.Raised)
         self.verticalLayout_8 = QVBoxLayout(self.frame_pages)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.verticalLayout_8.setContentsMargins(5, 0, 5, 0)
         self.stackedWidget = QStackedWidget(self.frame_pages)
         self.stackedWidget.setObjectName(u"stackedWidget")
         self.portfolio_page = QWidget()
@@ -310,11 +324,11 @@ class Ui_MainWindow(object):
         self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
         self.tableFrame = QFrame(self.portfolio_page)
         self.tableFrame.setObjectName(u"tableFrame")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy4.setHorizontalStretch(1)
-        sizePolicy4.setVerticalStretch(1)
-        sizePolicy4.setHeightForWidth(self.tableFrame.sizePolicy().hasHeightForWidth())
-        self.tableFrame.setSizePolicy(sizePolicy4)
+        sizePolicy6 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy6.setHorizontalStretch(1)
+        sizePolicy6.setVerticalStretch(1)
+        sizePolicy6.setHeightForWidth(self.tableFrame.sizePolicy().hasHeightForWidth())
+        self.tableFrame.setSizePolicy(sizePolicy6)
         self.tableFrame.setFrameShape(QFrame.StyledPanel)
         self.tableFrame.setFrameShadow(QFrame.Sunken)
         self.verticalLayout_9 = QVBoxLayout(self.tableFrame)
@@ -352,11 +366,11 @@ class Ui_MainWindow(object):
         __qtablewidgetitem12 = QTableWidgetItem()
         self.tableWidget.setItem(0, 5, __qtablewidgetitem12)
         self.tableWidget.setObjectName(u"tableWidget")
-        sizePolicy5 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        sizePolicy5.setHorizontalStretch(0)
-        sizePolicy5.setVerticalStretch(0)
-        sizePolicy5.setHeightForWidth(self.tableWidget.sizePolicy().hasHeightForWidth())
-        self.tableWidget.setSizePolicy(sizePolicy5)
+        sizePolicy7 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy7.setHorizontalStretch(0)
+        sizePolicy7.setVerticalStretch(0)
+        sizePolicy7.setHeightForWidth(self.tableWidget.sizePolicy().hasHeightForWidth())
+        self.tableWidget.setSizePolicy(sizePolicy7)
         self.tableWidget.setFrameShadow(QFrame.Raised)
         self.tableWidget.setMidLineWidth(1)
         self.tableWidget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
@@ -378,8 +392,8 @@ class Ui_MainWindow(object):
         self.setting_frame = QFrame(self.setting_page)
         self.setting_frame.setObjectName(u"setting_frame")
         self.setting_frame.setGeometry(QRect(0, 0, 861, 651))
-        sizePolicy4.setHeightForWidth(self.setting_frame.sizePolicy().hasHeightForWidth())
-        self.setting_frame.setSizePolicy(sizePolicy4)
+        sizePolicy6.setHeightForWidth(self.setting_frame.sizePolicy().hasHeightForWidth())
+        self.setting_frame.setSizePolicy(sizePolicy6)
         self.setting_frame.setMinimumSize(QSize(0, 0))
         self.setting_frame.setMaximumSize(QSize(16777215, 16777215))
         self.setting_frame.setFrameShape(QFrame.StyledPanel)
@@ -398,8 +412,8 @@ class Ui_MainWindow(object):
         self.help_frame = QFrame(self.help_page)
         self.help_frame.setObjectName(u"help_frame")
         self.help_frame.setGeometry(QRect(0, 0, 1051, 671))
-        sizePolicy4.setHeightForWidth(self.help_frame.sizePolicy().hasHeightForWidth())
-        self.help_frame.setSizePolicy(sizePolicy4)
+        sizePolicy6.setHeightForWidth(self.help_frame.sizePolicy().hasHeightForWidth())
+        self.help_frame.setSizePolicy(sizePolicy6)
         self.help_frame.setFrameShape(QFrame.StyledPanel)
         self.help_frame.setFrameShadow(QFrame.Sunken)
         self.verticalLayout_12 = QVBoxLayout(self.help_frame)
@@ -438,7 +452,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)

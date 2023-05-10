@@ -169,11 +169,8 @@ class StockModel(QSqlTableModel):
                     record = self.record(row)
                     # Update the columns
                     for column_name, value in update_data.items():
-                        # column_index = self.fieldIndex(column_name)
-                        # self.setData(index.siblingAtColumn(column_index), value, role=QtCore.Qt.ItemDataRole.EditRole)
                         record.setValue(column_name, value)
-                    # self.setRecord(row, record)
-                    # self.beforeUpdate.emit(row, record)
+
                     # Save the changes
                     status = self.updateRowInTable(row, record)
                     if status:

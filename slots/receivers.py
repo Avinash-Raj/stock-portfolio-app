@@ -1,6 +1,4 @@
-from typing import Callable
-
-from PySide6.QtCore import QPropertyAnimation, Slot
+from PySide6.QtCore import Slot
 
 from actions.stock_actions import AddStockAction, RefreshStockAction
 from themes.colors import *
@@ -8,35 +6,30 @@ from themes.colors import *
 
 @Slot()
 def on_open_menu_button_press(self):
-    # print(self.ui.LeftMenuContainer.width(), self.ui.LeftMenuContainer.height())
-    # print(self.ui.LeftMenuContainer.sizeHint())
-    # default_size: QSize = self.ui.LeftMenuContainer.sizeHint()
-    # default_size.setWidth(147, 357)
-    # self.ui.LeftMenuContainer.resize(QSize(147, 357))
-    self.opacity_animation.setDirection(QPropertyAnimation.Direction.Forward)
-    self.ui.menuOpenBtn.hide()
-    self.ui.LeftMenuContainer.show()
-    # start open/close animation
-    # self.minimum_width_animation.setDirection(QPropertyAnimation.Direction.Forward)
-    # self.minimum_width_animation.setStartValue(0)
-    # self.minimum_width_animation.setEndValue(147)
-    # self.minimum_width_animation.start()
+    """
+    Runs upon clicking sidebar open button.
+    """
 
-    # start opacity animation
-    self.opacity_animation.start()
+    start_width = 0
+    end_width = self.sidebar_width
+    self.sidebar_animation.setStartValue(start_width)
+    self.sidebar_animation.setEndValue(end_width)
+    self.sidebar_animation.start()
+    self.sidebar_visible = True
 
 
 @Slot()
 def on_close_menu_button_press(self):
-    self.opacity_animation.setDirection(QPropertyAnimation.Direction.Backward)
-    self.ui.menuOpenBtn.show()
+    """
+    Runs upon clicking side bar close button.
+    """
+    start_width = self.sidebar_width
+    end_width = 0
+    self.sidebar_animation.setStartValue(start_width)
+    self.sidebar_animation.setEndValue(end_width)
+    self.sidebar_animation.start()
 
-    # self.minimum_width_animation.setDirection(QPropertyAnimation.Direction.Backward)
-    # self.minimum_width_animation.setStartValue(147)
-    # self.minimum_width_animation.setEndValue(0)
-    self.opacity_animation.start()
-    # self.minimum_width_animation.start()
-    self.ui.LeftMenuContainer.hide()
+    self.sidebar_visible = False
 
 
 @Slot()

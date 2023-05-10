@@ -34,6 +34,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
         # Set the window title
         self.setWindowTitle("My Stocks")
+        self.sidebar_width = 150
         self.setup()
 
     def setup(self):
@@ -46,15 +47,14 @@ class MainWindow(QMainWindow):
         Default actions at the first place.
         """
         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
-        self.ui.LeftMenuContainer.hide()
+        # on_close_menu_button_press(self)
+        # Set maximum width to 0
+        self.ui.LeftMenuContainer.setMaximumWidth(0)  # initially hide the sidebar
+        self.sidebar_visible = False
         self.ui.stackedWidget.setCurrentWidget(self.ui.portfolio_page)
-        # Create the model
-        # self.model = StockModel()
 
         # Create the table view and set the model
         self.table_view = StockPortfolioTableView(self)
-        # self.model = self.table_view.model()
-        # self.table_view.setModel(self.model)
 
         # replace the existing tablewidget with the table view
         self.ui.tableFrame.layout().replaceWidget(self.ui.tableWidget, self.table_view)
@@ -66,26 +66,10 @@ class MainWindow(QMainWindow):
         """
         Sets the initial animation.
         """
-        # Set up opacity effect
-        self.opacity_effect = QGraphicsOpacityEffect()
-        self.opacity_effect.setOpacity(0.0)
-        widget.setGraphicsEffect(self.opacity_effect)
-
-        self.opacity_animation = QPropertyAnimation(self.opacity_effect, b"opacity")
-        self.opacity_animation.setDuration(250)
-        self.opacity_animation.setStartValue(0.0)
-        self.opacity_animation.setEndValue(1.0)
-        self.opacity_animation.setEasingCurve(QEasingCurve.Type.OutQuad)
-
-        # self.minimum_width_animation = QPropertyAnimation(self.ui.LeftMenuContainer, b"minimumwidth")
-        # self.minimum_width_animation.setDuration(500)
-        # self.minimum_width_animation.setEasingCurve(QEasingCurve.OutQuad)
-        # create the shadow effect
-        shadow = QGraphicsDropShadowEffect()
-        shadow.setBlurRadius(5)
-        shadow.setColor(QColor("white"))
-        shadow.setOffset(0, 0)
-        self.ui.topBarFrame.setGraphicsEffect(shadow)
+        # Create the sidebar animation
+        self.sidebar_animation = QPropertyAnimation(widget, b"maximumWidth", self)
+        self.sidebar_animation.setDuration(500)
+        self.sidebar_animation.setEasingCurve(QEasingCurve.Type.OutCubic)
 
     def initiate_signals(self):
         """

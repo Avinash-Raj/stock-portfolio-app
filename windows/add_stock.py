@@ -1,26 +1,13 @@
 import logging
-from typing import Tuple
 
-from PySide6.QtCore import Signal, Slot
+from PySide6.QtCore import Signal
 from PySide6.QtGui import QDoubleValidator, QIntValidator
 from PySide6.QtWidgets import QDialog
 
-from models import DB_NAME
-from models.controller import StockModelController
+from slots.receivers import add_stock_slot
 from utils.validators import is_valid_stock_symbol
-from views.spinner import Spinner, spinning
 from windows.messages import show_error_message
 from windows.ui_add_stock_dialog import Ui_Dialog as Ui_AddDialog
-
-
-def validate_callback(self: "AddStockDialog", is_success: bool, error: str):
-    """
-    A spinner callback function which accepts or rejects the add dialog model.
-    """
-    if is_success:
-        self.accept()
-    else:
-        show_error_message(error, self)
 
 
 class AddStockDialog(QDialog):
@@ -28,6 +15,7 @@ class AddStockDialog(QDialog):
     Add Stock Dialog.
     """
 
+    add_stock_signal = Signal(object, str, float, int, object)
     stock_added_signal = Signal(bool)
 
     def __init__(self, parent) -> None:
@@ -39,12 +27,12 @@ class AddStockDialog(QDialog):
         self.setup()
 
     def setup(self):
-        self.spinner = Spinner(self)
         self.ui.buttonBox.accepted.connect(self.validate_and_accept)
         self.ui.buttonBox.rejected.connect(self.reject)
         self.ui.nameLineEdit.setPlaceholderText("Enter Stock Symbol...")
         self.ui.priceLineEdit.setPlaceholderText("Enter Purchase Price...")
         self.ui.sharesLineEdit.setPlaceholderText("Enter Shares count...")
+        self.add_stock_signal.connect(add_stock_slot)
         self.validators()
 
     def validators(self):
@@ -58,8 +46,7 @@ class AddStockDialog(QDialog):
         price_validator.setRange(1.0, 500.0)
         self.ui.priceLineEdit.setValidator(price_validator)
 
-    @spinning(callback=validate_callback, db_name=DB_NAME)
-    def validate_and_accept(self, thread=None) -> Tuple[bool, str]:
+    def validate_and_accept(self):
         # Perform validation on the form fields
         errors = []
         required_fields = {
@@ -86,29 +73,19 @@ class AddStockDialog(QDialog):
             return False, f'Invalid Stock Symbol "{symbol}"'
 
         # add row
-        controller = StockModelController(thread.db if thread else None)
-        is_added = controller.add_stock_item(
-            symbol=symbol, price=float(values["price"]), quantity=int(values["shares"])
-        )
+        price, quantity = float(values["price"]), int(values["shares"])
+        self.add_stock_signal.emit(self, symbol, price, quantity, self.add_stock_callback)
 
-        if is_added:
-            logging.info("New stock added successfully.")
-            return True, ""
+        return False
 
-        # Grab the last error
-        last_error = (
-            thread.db.lastError().text()
-            if (thread and thread.db)
-            else self.parent().table_view.model.lastError().text()
-        )
-        logging.error(f"Failed to add stock, {last_error}")
-        return False, last_error
-
-    def reject(self) -> None:
-        # stop the spinner it's still spinning
-        if self.spinner.is_spinning:
-            self.spinner.stop()
-        super().reject()
+    def add_stock_callback(self, action_instance, is_success: bool, error: str):
+        """
+        A spinner callback function which accepts or rejects the add dialog model.
+        """
+        if is_success:
+            self.accept()
+        else:
+            show_error_message(error, self)
 
     def accept(self) -> None:
         super().accept()

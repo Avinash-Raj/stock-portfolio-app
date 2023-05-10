@@ -8,7 +8,15 @@ from PySide6.QtSql import QSqlDatabase, QSqlRecord, QSqlTableModel
 from entities import StockItem
 
 
+class QSqlRecordWrapper(QtCore.QObject):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.record = None
+
+
 class StockModel(QSqlTableModel):
+    beforeStockUpdate = QtCore.Signal(int, QSqlRecordWrapper)
+
     def __init__(self, db: Optional[QSqlDatabase] = None):
         if db:
             super().__init__(db=db)
@@ -34,17 +42,19 @@ class StockModel(QSqlTableModel):
         ]
 
         # connect to beforeUpdate signal
-        self.beforeUpdate.connect(self._before_update)
+        self.beforeStockUpdate.connect(self._before_update)
 
         # connect to beforeInsert signal
         self.beforeInsert.connect(self._before_insert)
 
-    def _before_update(self, record_index: int, record: QSqlRecord):
+    @QtCore.Slot(int, QSqlRecordWrapper)
+    def _before_update(self, record_index: int, wrapper: QSqlRecordWrapper):
         """
         Slot which was triggered before record update
         """
         logging.debug("Before update slot gets called.")
-        record.setValue("dt_updated", "")
+        current_datetime = QtCore.QDateTime.currentDateTime().toUTC().toString(QtCore.Qt.DateFormat.ISODate)
+        wrapper.record.setValue("dt_updated", current_datetime)
 
     def _before_insert(self, record: QSqlRecord):
         """
@@ -137,14 +147,11 @@ class StockModel(QSqlTableModel):
         if reset_filter:
             self.setFilter("")
 
-    def updateRow(self, row_index: int, record: QSqlRecord):
-        """
-        Update a record based on the record's primary key ID.
-        """
-        # call updateRowInTable to update the row in the model
-        self.updateRowInTable(row_index, record)
-        # call submitAll to submit the changes to the database
-        return self.submitAll()
+    def updateRowInTable(self, row, record):
+        wrapper = QSqlRecordWrapper()
+        wrapper.record = record
+        self.beforeStockUpdate.emit(row, wrapper)
+        return super().updateRowInTable(row, wrapper.record)
 
     def updateRows(self, data: Dict[int, Dict[str, Any]]) -> Dict[int, str]:
         # Update the records
@@ -165,13 +172,16 @@ class StockModel(QSqlTableModel):
                         # column_index = self.fieldIndex(column_name)
                         # self.setData(index.siblingAtColumn(column_index), value, role=QtCore.Qt.ItemDataRole.EditRole)
                         record.setValue(column_name, value)
-                    self.setRecord(row, record)
+                    # self.setRecord(row, record)
+                    # self.beforeUpdate.emit(row, record)
                     # Save the changes
-                    if self.submitAll():
+                    status = self.updateRowInTable(row, record)
+                    if status:
                         output[record_id] = ""
                     else:
                         output[record_id] = self.lastError().text()
                     break  # Exit the inner loop
+        self.submitAll()
         # reset filter
         self.setFilter("")
 

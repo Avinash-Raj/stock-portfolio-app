@@ -1,10 +1,12 @@
-from PySide6.QtCore import QPropertyAnimation
+from typing import Callable
 
-from actions.stock_refresh import RefreshStock
+from PySide6.QtCore import QPropertyAnimation, Slot
+
+from actions.stock_actions import AddStockAction, RefreshStockAction
 from themes.colors import *
-from windows.add_stock import AddStockDialog
 
 
+@Slot()
 def on_open_menu_button_press(self):
     # print(self.ui.LeftMenuContainer.width(), self.ui.LeftMenuContainer.height())
     # print(self.ui.LeftMenuContainer.sizeHint())
@@ -24,6 +26,7 @@ def on_open_menu_button_press(self):
     self.opacity_animation.start()
 
 
+@Slot()
 def on_close_menu_button_press(self):
     self.opacity_animation.setDirection(QPropertyAnimation.Direction.Backward)
     self.ui.menuOpenBtn.show()
@@ -36,6 +39,7 @@ def on_close_menu_button_press(self):
     self.ui.LeftMenuContainer.hide()
 
 
+@Slot()
 def set_menu_button_colors(self, button):
     # Set the background color of the selected button to green
     button.setStyleSheet(f"QPushButton {{ background-color: {BUTTON_BG_COLOR} }}")
@@ -47,27 +51,31 @@ def set_menu_button_colors(self, button):
             other_button.setStyleSheet("")
 
 
+@Slot()
 def open_portfolio_page(self):
     self.ui.stackedWidget.setCurrentWidget(self.ui.portfolio_page)
     set_menu_button_colors(self, self.ui.portfolioBtn)
 
 
+@Slot()
 def open_help_page(self):
     self.ui.stackedWidget.setCurrentWidget(self.ui.help_page)
     set_menu_button_colors(self, self.ui.helpBtn)
 
 
+@Slot()
 def open_settings_page(self):
     self.ui.stackedWidget.setCurrentWidget(self.ui.setting_page)
     set_menu_button_colors(self, self.ui.settingsBtn)
 
 
-def open_add_stock_dialog(self):
-    dialog = AddStockDialog(self)
-    dialog.stock_added_signal.connect(self.table_view.handle_stock_added_signal)
-    dialog.exec()
+@Slot(object, str, float, int, object)
+def add_stock_slot(self, symbol, price, quantity, callback):
+    action = AddStockAction(self, callback=callback)
+    action.perform(symbol, price, quantity)
 
 
-def refresh_stocks(self):
-    refresh_stock = RefreshStock(self, callback=self.after_stock_refresh)
-    refresh_stock.refresh()
+@Slot(object, object)
+def refresh_stocks_slot(self, callback):
+    action = RefreshStockAction(self, callback=callback)
+    action.perform()

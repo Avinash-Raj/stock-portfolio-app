@@ -1,6 +1,6 @@
 import logging
 
-from PySide6.QtCore import QEasingCurve, QParallelAnimationGroup, QPropertyAnimation, QSize, Qt
+from PySide6.QtCore import QEasingCurve, QParallelAnimationGroup, QPropertyAnimation, QSize, Qt, Slot
 from PySide6.QtGui import QColor, QFont
 from PySide6.QtWidgets import (
     QApplication,
@@ -20,11 +20,9 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from actions import SpinnerBase
-
-# from models import StockModel
 from slots.receivers import *
-from views import StockPortfolioTableView
+from views.table import StockPortfolioTableView
+from windows.add_stock import AddStockDialog
 from windows.ui_interface import Ui_MainWindow
 
 
@@ -99,10 +97,19 @@ class MainWindow(QMainWindow):
         self.ui.portfolioBtn.clicked.connect(lambda: open_portfolio_page(self))
         self.ui.settingsBtn.clicked.connect(lambda: open_settings_page(self))
         self.ui.helpBtn.clicked.connect(lambda: open_help_page(self))
-        self.ui.addBtn.clicked.connect(lambda: open_add_stock_dialog(self))
-        self.ui.refreshBtn.clicked.connect(lambda: refresh_stocks(self))
+        self.ui.addBtn.clicked.connect(self.open_add_stock_dialog)
+        self.ui.refreshBtn.clicked.connect(lambda: refresh_stocks_slot(self, self.after_stock_refresh))
 
-    def after_stock_refresh(self, action_instance: "SpinnerBase", status: bool, error: str):
+    def after_stock_refresh(self, action_instance, status: bool, error: str):
         if status:
             logging.info("Stocks refreshed and table reloaded!")
             self.table_view.reload_table()
+
+    @Slot()
+    def open_add_stock_dialog(self):
+        """
+        Open add stock dialog model and perform necessary actions.
+        """
+        dialog = AddStockDialog(self)
+        dialog.stock_added_signal.connect(self.table_view.handle_stock_added_signal)
+        dialog.exec()

@@ -2,13 +2,10 @@
 # Credit goes to: https://github.com/fbjorn/QtWaitingSpinner/blob/master/pyqtspinner/spinner.py
 #####
 
-import logging
 import math
-from typing import Callable, Optional
 
-from PySide6.QtCore import QCoreApplication, QObject, QRect, Qt, QThread, QTimer, Signal, Slot
+from PySide6.QtCore import QRect, Qt, QTimer
 from PySide6.QtGui import QColor, QPainter, QPaintEvent
-from PySide6.QtSql import QSqlDatabase
 from PySide6.QtWidgets import QWidget
 
 
@@ -282,126 +279,3 @@ class WaitingSpinner(QWidget):
             result_alpha = min(1.0, max(0.0, result_alpha))
             color.setAlphaF(result_alpha)
         return color
-
-
-# pylint: disable=too-few-public-methods
-class SpinningThread(QThread):
-    finished_signal = Signal(object, bool, str)
-
-    def __init__(self, parent, func, *args, db_name=None, **kwargs):
-        super().__init__(parent)
-        self.func = func
-        self.args = args
-        self.db_name = db_name
-        self.kwargs = kwargs
-        self.db = None
-
-    def run(self):
-        if self.db_name:
-            db = QSqlDatabase.addDatabase("QSQLITE", "spinning_thread")
-            db.setDatabaseName(self.db_name)
-            if not db.open():
-                logging.debug(db.lastError().text())
-            self.db = db
-        result = self.func(*self.args, thread=self, **self.kwargs)
-        # emit finished_signal with parent_class instance as first argument
-        self.finished_signal.emit(self.args[0], *result)
-
-
-class spinning:
-    """
-    spinner decorator for instance method which supposed to start spinning at the
-    method start and stops at the end.
-
-    Underlying method should be executed inside a seperate thread. If the method has code
-    to make db connections then  relevant db_name (ex: test.db) should be passed.
-    This ensures a seperate db connection made from the new thread.
-    """
-
-    def __init__(self, callback: Optional[Callable] = None, db_name: Optional[str] = None):
-        self.callback = callback
-        self.db_name = db_name
-
-    def __call__(self, func):
-        def wrapper(instance, *args, **kwargs):
-            assert instance.spinner, "spinner member unavailable"
-            ret = None
-            try:
-                # spinner parent should be same as thread parent
-                thread = SpinningThread(
-                    instance.spinner.parent(), func, instance, *args, db_name=self.db_name, **kwargs
-                )
-                thread.started.connect(lambda: self.on_thread_started(instance))
-                thread.finished.connect(lambda: self.on_thread_finished(instance))
-                thread.finished_signal.connect(self.processing_finished)
-                thread.start()
-            except Exception as e:
-                raise e
-            return ret
-
-        return wrapper
-
-    @Slot(object)
-    def on_thread_started(self, instance):
-        logging.debug("Spinning Thread started!")
-        instance.spinner.start()
-
-    @Slot(object)
-    def on_thread_finished(self, instance):
-        logging.debug("Spinning Thread finished!")
-        instance.spinner.stop()
-
-    @Slot(object, bool, str)
-    def processing_finished(self, instance, status: bool, error: str):
-        logging.debug("Thread processing finished!")
-        callback = self.callback or instance.callback
-        if callback:
-            logging.debug("Calling callback function...")
-            callback(instance, status, error)
-
-
-class Spinner(WaitingSpinner):
-    """
-    Spinner class defined with default arguments inorder to use accross all windows.
-    """
-
-    def __init__(self, parent):
-        super().__init__(
-            parent,
-            disable_parent_when_spinning=True,
-            modality=Qt.WindowModality.WindowModal,
-            lines=10,
-            line_length=20,
-            line_width=8,
-            radius=20,
-            color=QColor(Qt.GlobalColor.cyan),
-        )
-
-
-# @obsolete
-class SpinningWorker(QObject):
-    finished = Signal()
-    stop_signal = Signal()
-
-    # def __init__(self, *args, **kwargs) -> None:
-    #     super().__init__(*args, **kwargs)
-    # self.spinner = spinner
-    def __init__(self, parent=None) -> None:
-        super().__init__(parent)
-        self.stop_signal.connect(self.stop)
-
-    @Slot()
-    def run(self, parent):
-        logging.info("Worker started!")
-        self.spinner = Spinner(parent=parent)
-        self.spinner.start()
-        print("spinner started")
-        while True:
-            QThread.msleep(500)
-            self.stop()
-
-    @Slot()
-    def stop(self):
-        self.spinner.stop()
-        print("spinner stopped")
-        self.finished.emit()

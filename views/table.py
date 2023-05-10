@@ -9,6 +9,7 @@ from PySide6.QtWidgets import QAbstractItemView, QHeaderView, QMenu, QTableView
 from entities.classes import CURRENCIES
 from models import StockModel, StockModelController
 from settings import PORTFOLIO_TABLE_AMOUNT_COLUMN_NAMES, PORTFOLIO_TABLE_COLUMN_NAMES_TO_HIDE
+from slots.receivers import refresh_stocks_slot
 from themes.colors import TABLE_CELL_GREEN_BACKGROUND_COLOR, TABLE_CELL_RED_BACKGROUND_COLOR
 
 
@@ -33,8 +34,9 @@ class BaseTableView(QTableView):
 
 
 class StockPortfolioTableView(BaseTableView):
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+    def __init__(self, parent, *args, **kwargs) -> None:
+        super().__init__(parent, *args, **kwargs)
+        self.parent_widget = parent
         self.model_cls = StockModel
         self.setModel(self.model_cls())
         self.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
@@ -43,8 +45,11 @@ class StockPortfolioTableView(BaseTableView):
     def initUI(self):
         self.menu = QMenu(self)
         self.delete_menu = QAction("Delete", self)
+        self.refresh_menu = QAction("Refresh", self)
         self.menu.addAction(self.delete_menu)
-        self.delete_menu.triggered.connect(self.on_delete_triggered)
+        self.menu.addAction(self.refresh_menu)
+        self.delete_menu.triggered.connect(self.on_delete_menu_triggered)
+        self.refresh_menu.triggered.connect(self.on_refresh_menu_triggered)
 
     def get_selected_rows(self) -> List[int]:
         selected_rows = list(set(index.row() for index in self.selectedIndexes()))
@@ -55,7 +60,11 @@ class StockPortfolioTableView(BaseTableView):
         return self.model().data(index)
 
     @Slot()
-    def on_delete_triggered(self) -> None:
+    def on_refresh_menu_triggered(self):
+        refresh_stocks_slot(self.parent_widget, self.parent_widget.after_stock_refresh)
+
+    @Slot()
+    def on_delete_menu_triggered(self) -> None:
         selected_rows = self.get_selected_rows()
         column_id = 0  # first column, ie. ID
         record_ids = []

@@ -34,7 +34,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
         # Set the window title
         self.setWindowTitle("My Stocks")
-        self.sidebar_width = 150
+        self.sidebar_width = 160
         self.setup()
 
     def setup(self):
@@ -47,11 +47,12 @@ class MainWindow(QMainWindow):
         Default actions at the first place.
         """
         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
-        # on_close_menu_button_press(self)
-        # Set maximum width to 0
-        self.ui.LeftMenuContainer.setMaximumWidth(0)  # initially hide the sidebar
+
         self.sidebar_visible = False
+        on_close_menu_button_press(self)
         self.ui.stackedWidget.setCurrentWidget(self.ui.portfolio_page)
+        # mark the portfolio button as selected by default
+        set_menu_button_colors(self, self.ui.portfolioBtn)
 
         # Create the table view and set the model
         self.table_view = StockPortfolioTableView(self)

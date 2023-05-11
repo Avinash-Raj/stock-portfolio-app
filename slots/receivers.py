@@ -16,6 +16,8 @@ def on_open_menu_button_press(self):
     self.sidebar_animation.setEndValue(end_width)
     self.sidebar_animation.start()
     self.sidebar_visible = True
+    # hide menu
+    self.ui.menuOpenBtn.hide()
 
 
 @Slot()
@@ -30,6 +32,8 @@ def on_close_menu_button_press(self):
     self.sidebar_animation.start()
 
     self.sidebar_visible = False
+    # hide menu
+    self.ui.menuOpenBtn.show()
 
 
 @Slot()
@@ -40,7 +44,7 @@ def set_menu_button_colors(self, button):
     # Set the background color of the other buttons to their default color
     for other_button in [self.ui.portfolioBtn, self.ui.settingsBtn, self.ui.helpBtn]:
         if other_button is not button:
-            print(f"setting syte to none for {other_button}")
+            # print(f"setting syte to none for {other_button}")
             other_button.setStyleSheet("")
 
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'interfaceMenjWM.ui'
+## Form generated from reading UI file 'interfaceRINYpl.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.4.3
 ##
@@ -83,29 +83,34 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.setContentsMargins(0, 1, 0, 0)
         self.LeftMenuContainer = QWidget(self.centralwidget)
         self.LeftMenuContainer.setObjectName(u"LeftMenuContainer")
-        sizePolicy = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.LeftMenuContainer.sizePolicy().hasHeightForWidth())
         self.LeftMenuContainer.setSizePolicy(sizePolicy)
-        self.LeftMenuContainer.setMaximumSize(QSize(150, 16777215))
-        self.verticalLayout = QVBoxLayout(self.LeftMenuContainer)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(0, -1, 0, -1)
+        self.LeftMenuContainer.setMaximumSize(QSize(160, 16777215))
+        self.horizontalLayout_3 = QHBoxLayout(self.LeftMenuContainer)
+        self.horizontalLayout_3.setSpacing(1)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.horizontalLayout_3.setSizeConstraint(QLayout.SetMaximumSize)
+        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.LeftMenuSubContainer = QWidget(self.LeftMenuContainer)
         self.LeftMenuSubContainer.setObjectName(u"LeftMenuSubContainer")
         sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        sizePolicy1.setHorizontalStretch(3)
-        sizePolicy1.setVerticalStretch(3)
+        sizePolicy1.setHorizontalStretch(1)
+        sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.LeftMenuSubContainer.sizePolicy().hasHeightForWidth())
         self.LeftMenuSubContainer.setSizePolicy(sizePolicy1)
-        self.LeftMenuSubContainer.setMaximumSize(QSize(150, 16777215))
-        self.LeftMenuSubContainer.setSizeIncrement(QSize(-1, 0))
+        self.LeftMenuSubContainer.setMaximumSize(QSize(160, 16777215))
+        self.LeftMenuSubContainer.setSizeIncrement(QSize(0, 0))
         self.LeftMenuSubContainer.setBaseSize(QSize(0, -1))
         self.verticalLayout_2 = QVBoxLayout(self.LeftMenuSubContainer)
+#ifndef Q_OS_MAC
+        self.verticalLayout_2.setSpacing(-1)
+#endif
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout_2.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_2.setContentsMargins(0, 12, 0, 0)
         self.closeFrame = QFrame(self.LeftMenuSubContainer)
         self.closeFrame.setObjectName(u"closeFrame")
         sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
@@ -137,6 +142,11 @@ class Ui_MainWindow(object):
 
         self.menuFrame = QFrame(self.LeftMenuSubContainer)
         self.menuFrame.setObjectName(u"menuFrame")
+        sizePolicy4 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.menuFrame.sizePolicy().hasHeightForWidth())
+        self.menuFrame.setSizePolicy(sizePolicy4)
         self.menuFrame.setFrameShape(QFrame.StyledPanel)
         self.menuFrame.setFrameShadow(QFrame.Raised)
         self.verticalLayout_3 = QVBoxLayout(self.menuFrame)
@@ -145,14 +155,14 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addWidget(self.menuFrame)
 
-        self.frame_2 = QFrame(self.LeftMenuSubContainer)
-        self.frame_2.setObjectName(u"frame_2")
-        self.frame_2.setFrameShape(QFrame.StyledPanel)
-        self.frame_2.setFrameShadow(QFrame.Raised)
-        self.verticalLayout_4 = QVBoxLayout(self.frame_2)
+        self.portFolioBtnFrame = QFrame(self.LeftMenuSubContainer)
+        self.portFolioBtnFrame.setObjectName(u"portFolioBtnFrame")
+        self.portFolioBtnFrame.setFrameShape(QFrame.StyledPanel)
+        self.portFolioBtnFrame.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_4 = QVBoxLayout(self.portFolioBtnFrame)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.verticalLayout_4.setContentsMargins(12, 0, 0, -1)
-        self.portfolioBtn = QPushButton(self.frame_2)
+        self.verticalLayout_4.setContentsMargins(30, 0, 30, -1)
+        self.portfolioBtn = QPushButton(self.portFolioBtnFrame)
         self.portfolioBtn.setObjectName(u"portfolioBtn")
         icon1 = QIcon()
         icon1.addFile(u":/icons/sample-qt/icons/home.svg", QSize(), QIcon.Normal, QIcon.Off)
@@ -162,15 +172,15 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.addWidget(self.portfolioBtn)
 
 
-        self.verticalLayout_2.addWidget(self.frame_2)
+        self.verticalLayout_2.addWidget(self.portFolioBtnFrame, 0, Qt.AlignHCenter)
 
         self.frame_3 = QFrame(self.LeftMenuSubContainer)
         self.frame_3.setObjectName(u"frame_3")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.frame_3.sizePolicy().hasHeightForWidth())
-        self.frame_3.setSizePolicy(sizePolicy4)
+        sizePolicy5 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
+        sizePolicy5.setHorizontalStretch(0)
+        sizePolicy5.setVerticalStretch(0)
+        sizePolicy5.setHeightForWidth(self.frame_3.sizePolicy().hasHeightForWidth())
+        self.frame_3.setSizePolicy(sizePolicy5)
         self.frame_3.setFrameShape(QFrame.StyledPanel)
         self.frame_3.setFrameShadow(QFrame.Raised)
         self.verticalLayout_5 = QVBoxLayout(self.frame_3)
@@ -180,10 +190,13 @@ class Ui_MainWindow(object):
 
         self.frame_4 = QFrame(self.LeftMenuSubContainer)
         self.frame_4.setObjectName(u"frame_4")
+        sizePolicy2.setHeightForWidth(self.frame_4.sizePolicy().hasHeightForWidth())
+        self.frame_4.setSizePolicy(sizePolicy2)
         self.frame_4.setFrameShape(QFrame.StyledPanel)
         self.frame_4.setFrameShadow(QFrame.Raised)
         self.verticalLayout_6 = QVBoxLayout(self.frame_4)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.verticalLayout_6.setContentsMargins(30, 12, 30, 12)
         self.settingsBtn = QPushButton(self.frame_4)
         self.settingsBtn.setObjectName(u"settingsBtn")
         icon2 = QIcon()
@@ -203,21 +216,18 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.addWidget(self.helpBtn)
 
 
-        self.verticalLayout_2.addWidget(self.frame_4)
+        self.verticalLayout_2.addWidget(self.frame_4, 0, Qt.AlignHCenter)
 
 
-        self.verticalLayout.addWidget(self.LeftMenuSubContainer)
+        self.horizontalLayout_3.addWidget(self.LeftMenuSubContainer)
 
 
         self.horizontalLayout_2.addWidget(self.LeftMenuContainer)
 
         self.MainBodyContainer = QWidget(self.centralwidget)
         self.MainBodyContainer.setObjectName(u"MainBodyContainer")
-        sizePolicy5 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy5.setHorizontalStretch(1)
-        sizePolicy5.setVerticalStretch(0)
-        sizePolicy5.setHeightForWidth(self.MainBodyContainer.sizePolicy().hasHeightForWidth())
-        self.MainBodyContainer.setSizePolicy(sizePolicy5)
+        sizePolicy.setHeightForWidth(self.MainBodyContainer.sizePolicy().hasHeightForWidth())
+        self.MainBodyContainer.setSizePolicy(sizePolicy)
         self.MainBodyContainer.setStyleSheet(u"#tableContainer {\n"
 "background-color: #2E2E2E;\n"
 "border: none;\n"
@@ -437,6 +447,8 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2.addWidget(self.MainBodyContainer)
 
+        self.horizontalLayout_2.setStretch(0, 1)
+        self.horizontalLayout_2.setStretch(1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")

@@ -61,6 +61,7 @@ class MainWindow(QMainWindow):
         self.ui.tableFrame.layout().replaceWidget(self.ui.tableWidget, self.table_view)
         # Set the last header to horizontally stretch to fill the remaining space
         header = self.table_view.horizontalHeader()
+        header.setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         header.setStretchLastSection(True)
 
     def setup_animation(self, widget: QWidget):

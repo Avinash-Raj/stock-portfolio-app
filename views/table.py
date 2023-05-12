@@ -1,16 +1,44 @@
 import logging
-from typing import List
+from collections import defaultdict
+from typing import Dict, List, Optional
 
-from PySide6.QtCore import Qt, Slot
-from PySide6.QtGui import QAction, QContextMenuEvent, QFont, QStandardItem, QStandardItemModel
+from PySide6.QtCore import QModelIndex, QRect, QSize, Qt, Slot
+from PySide6.QtGui import (
+    QAction,
+    QColor,
+    QContextMenuEvent,
+    QFont,
+    QPainter,
+    QPalette,
+    QPen,
+    QStandardItem,
+    QStandardItemModel,
+)
 from PySide6.QtSql import QSqlTableModel
-from PySide6.QtWidgets import QAbstractItemView, QHeaderView, QMenu, QTableView
+from PySide6.QtWidgets import (
+    QAbstractItemView,
+    QHeaderView,
+    QMenu,
+    QStyle,
+    QStyledItemDelegate,
+    QStyleOptionViewItem,
+    QTableView,
+)
 
 from entities.classes import CURRENCIES
-from models import StockModel, StockModelController
-from settings import PORTFOLIO_TABLE_AMOUNT_COLUMN_NAMES, PORTFOLIO_TABLE_COLUMN_NAMES_TO_HIDE
+from models import StockModelController, StockModelWithFooter
+from settings import (
+    PORTFOLIO_TABLE_AMOUNT_COLUMN_NAMES,
+    PORTFOLIO_TABLE_COLUMN_NAMES_TO_HIDE,
+    PORTFOLIO_TABLE_SUMUP_COLUMN_NAMES,
+)
 from slots.receivers import refresh_stocks_slot
-from themes.colors import TABLE_CELL_GREEN_BACKGROUND_COLOR, TABLE_CELL_RED_BACKGROUND_COLOR
+from themes.colors import (
+    TABLE_CELL_FORGEGROUND_COLOR,
+    TABLE_CELL_FORGEGROUND_GREY_COLOR,
+    TABLE_CELL_GREEN_BACKGROUND_COLOR,
+    TABLE_CELL_RED_BACKGROUND_COLOR,
+)
 
 
 class BaseTableView(QTableView):
@@ -33,14 +61,50 @@ class BaseTableView(QTableView):
         return horizontal_header
 
 
+class BorderItemDelegate(QStyledItemDelegate):
+    # def sizeHint(self, option, index):
+    #     # Set the desired size for the cell
+    #     return QSize(100, 200)  # Width: 100 pixels, Height: 50 pixels
+
+    def paint(self, painter, option, index):
+        # last row
+        if index.row() == (index.model().rowCount() - 1) and index.column() in [4, 5, 6]:
+            painter.save()
+
+            # Add a border around sum columns
+            border_rect: QRect = option.rect
+            border_rect.setBottom(border_rect.bottom() - 1)
+            border_rect.setRight(border_rect.right() - 1)
+            painter.setPen(QPen(Qt.GlobalColor.magenta))
+            painter.drawRect(border_rect)
+
+            painter.restore()
+
+        super().paint(painter, option, index)
+
+
 class StockPortfolioTableView(BaseTableView):
     def __init__(self, parent, *args, **kwargs) -> None:
         super().__init__(parent, *args, **kwargs)
         self.parent_widget = parent
-        self.model_cls = StockModel
+        self.model_cls = StockModelWithFooter
         self.setModel(self.model_cls())
         self.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.initUI()
+        self.beautify()
+
+    def beautify(self):
+        """
+        Beautifies the table.
+        """
+        self.setItemDelegate(BorderItemDelegate())
+        # Set the desired row height
+        row_height = 40  # Adjust this value to increase or decrease the row height
+        for row in range(self.model().rowCount()):
+            self.setRowHeight(row, row_height)
+
+        self.setBackgroundRole(QPalette.ColorRole.Dark)
+        self.setAutoFillBackground(True)
 
     def initUI(self):
         self.menu = QMenu(self)
@@ -69,7 +133,9 @@ class StockPortfolioTableView(BaseTableView):
         column_id = 0  # first column, ie. ID
         record_ids = []
         for row_id in selected_rows:
-            record_ids.append(self.get_cell_data(row_id, column_id))
+            data = self.get_cell_data(row_id, column_id)
+            if data:
+                record_ids.append(data)
         if not record_ids:
             return None
         logging.info(f"Going to delete record ids, {record_ids}")
@@ -97,6 +163,33 @@ class StockPortfolioTableView(BaseTableView):
     def contextMenuEvent(self, event: QContextMenuEvent):
         self.menu.exec(event.globalPos())
 
+    @classmethod
+    def get_standard_item(
+        cls,
+        value: str,
+        alignment: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter,
+        font: QFont = QFont("Arial", 13, QFont.Weight.Bold),
+        background: Optional[QColor] = None,
+        foreground: Optional[QColor] = None,
+    ) -> QStandardItem:
+        item = QStandardItem()
+        item.setData(value, Qt.ItemDataRole.DisplayRole)
+        item.setTextAlignment(alignment)
+        item.setFont(font)
+        if background:
+            item.setBackground(background)
+        if foreground:
+            item.setForeground(foreground)
+
+        return item
+
+    @classmethod
+    def get_column_sum(cls, data_list: List) -> float:
+        """
+        returns the sum of all the rows on a particluar column.
+        """
+        return sum(data_list)
+
     def _convert_to_standard_model(self, model: QSqlTableModel) -> QStandardItemModel:
         """
         Convert QAbstractItemModel to QStandardItemModel
@@ -105,28 +198,56 @@ class StockPortfolioTableView(BaseTableView):
         standard_model.setColumnCount(model.columnCount())
         standard_model.setRowCount(model.rowCount())
         amount_column_indexes = [model.fieldIndex(i) for i in PORTFOLIO_TABLE_AMOUNT_COLUMN_NAMES]
+        sumup_column_indexes = [model.fieldIndex(i) for i in PORTFOLIO_TABLE_SUMUP_COLUMN_NAMES]
+        row_count = model.rowCount()
+        column_count = model.columnCount()
+        data: Dict[int, list] = defaultdict(list)
 
-        for i in range(model.columnCount()):
+        for i in range(column_count):
             # Set header data for QStandardItemModel
             header_item = QStandardItem(model.headerData(i, Qt.Orientation.Horizontal))
             standard_model.setHorizontalHeaderItem(i, header_item)
             is_amount_column = bool(i in amount_column_indexes)
             is_gain_column = i == model.fieldIndex("gain")
+            is_sumup_column_index = bool(i in sumup_column_indexes)
 
-            for j in range(model.rowCount()):
+            for j in range(row_count):
+                if j + 1 == row_count:
+                    # last row (ie. Footer row)
+                    item = self.get_standard_item("")
+                    if i == model.fieldIndex("name"):
+                        # name cell
+                        cell_text = "Total"
+                        item = self.get_standard_item(cell_text, font=QFont("Arial", 20, QFont.Weight.Bold))
+                    elif is_sumup_column_index:
+                        # column to sumup
+                        cell_text = self.get_column_sum(data[i])
+                        item = self.get_standard_item(f"$ {cell_text}", font=QFont("Arial", 20, QFont.Weight.Bold))
+                    # apply bg color for gain column
+                    if is_gain_column:
+                        gain_data = item.data(Qt.ItemDataRole.DisplayRole)
+                        if "-" in gain_data:
+                            item.setBackground(TABLE_CELL_RED_BACKGROUND_COLOR)
+                        else:
+                            item.setBackground(TABLE_CELL_GREEN_BACKGROUND_COLOR)
+                        item.setForeground(TABLE_CELL_FORGEGROUND_COLOR)
+                    standard_model.setItem(j, i, item)
+                    continue
                 value = model.data(model.index(j, i))
+                data[i].append(value)
                 preceeding_text = ""
                 if is_amount_column:
                     currency_code = model.data(model.index(j, model.fieldIndex("currency")))
-                    currency_symbol = CURRENCIES[currency_code].symbol
-                    preceeding_text = f"{currency_symbol} "
+                    if currency_code:
+                        currency_symbol = CURRENCIES[currency_code].symbol
+                        preceeding_text = f"{currency_symbol} "
                 value = f"{preceeding_text}{value}"
-                item = QStandardItem()
-                item.setData(value, Qt.ItemDataRole.DisplayRole)
-                item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+
+                item = self.get_standard_item(value)
                 # set font for all amount columns
                 if is_amount_column:
-                    item.setFont(QFont("Arial", 12))
+                    item.setFont(QFont("Arial", 14, QFont.Weight.Bold))
+                    item.setForeground(TABLE_CELL_FORGEGROUND_GREY_COLOR)
                 # set background if in case of gain column
                 if is_gain_column:
                     if "-" in value:

@@ -3,6 +3,7 @@ from dataclasses import asdict
 from typing import Any, Dict, List, Optional
 
 from PySide6 import QtCore
+from PySide6.QtCore import QModelIndex, Qt
 from PySide6.QtSql import QSqlDatabase, QSqlRecord, QSqlTableModel
 
 from entities import StockItem
@@ -183,3 +184,25 @@ class StockModel(QSqlTableModel):
         self.setFilter("")
 
         return output
+
+
+class StockModelWithFooter(StockModel):
+    """
+    Used only for displaying data on portfolio table.
+    """
+
+    def rowCount(self, parent=QModelIndex()):
+        # Add one extra row for the footer
+        return super().rowCount(parent) + 1
+
+    def data(self, index: QModelIndex, role=Qt.ItemDataRole.DisplayRole):
+        if not index.isValid():
+            return None
+
+        column = index.column()
+
+        if column in [10, 11] and role == Qt.ItemDataRole.DisplayRole:
+            date_time = super().data(index, role)
+            return date_time.replace("T", " ").replace("Z", "")
+
+        return super().data(index, role)

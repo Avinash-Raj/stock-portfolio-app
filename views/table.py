@@ -222,7 +222,7 @@ class StockPortfolioTableView(BaseTableView):
                     elif is_sumup_column_index:
                         # column to sumup
                         cell_text = self.get_column_sum(data[i])
-                        item = self.get_standard_item(f"$ {cell_text}", font=QFont("Arial", 20, QFont.Weight.Bold))
+                        item = self.get_standard_item(f"$ {cell_text:.2f}", font=QFont("Arial", 20, QFont.Weight.Bold))
                     # apply bg color for gain column
                     if is_gain_column:
                         gain_data = item.data(Qt.ItemDataRole.DisplayRole)

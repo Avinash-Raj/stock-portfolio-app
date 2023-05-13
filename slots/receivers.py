@@ -47,23 +47,43 @@ def set_menu_button_colors(self, button):
             # print(f"setting syte to none for {other_button}")
             other_button.setStyleSheet("")
 
+    # if button == self.ui.portfolioBtn:
+    #     # portfolio page selected
+    #     frame = self.ui.portFolioBtnFrame
+    #     frame.setStyleSheet("background-color: black;")  # Set the background color here
+
+
+def show_or_hide_stock_buttons(self, show=True):
+    """
+    Show/hide stock buttons such as refresh button and stock add button.
+    """
+    if show:
+        self.ui.refreshBtn.show()
+        self.ui.addBtn.show()
+    else:
+        self.ui.refreshBtn.hide()
+        self.ui.addBtn.hide()
+
 
 @Slot()
 def open_portfolio_page(self):
     self.ui.stackedWidget.setCurrentWidget(self.ui.portfolio_page)
     set_menu_button_colors(self, self.ui.portfolioBtn)
+    show_or_hide_stock_buttons(self, show=True)
 
 
 @Slot()
 def open_help_page(self):
     self.ui.stackedWidget.setCurrentWidget(self.ui.help_page)
     set_menu_button_colors(self, self.ui.helpBtn)
+    show_or_hide_stock_buttons(self, show=False)
 
 
 @Slot()
 def open_settings_page(self):
     self.ui.stackedWidget.setCurrentWidget(self.ui.setting_page)
     set_menu_button_colors(self, self.ui.settingsBtn)
+    show_or_hide_stock_buttons(self, show=False)
 
 
 @Slot(object, str, float, int, object)

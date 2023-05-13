@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'interfaceRINYpl.ui'
+## Form generated from reading UI file 'interfaceIVNkhc.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.4.3
 ##
@@ -16,18 +16,19 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QFrame, QHBoxLayout,
-    QHeaderView, QLayout, QMainWindow, QMenu,
-    QMenuBar, QPushButton, QSizePolicy, QStackedWidget,
-    QStatusBar, QTableWidget, QTableWidgetItem, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QAbstractButton, QAbstractScrollArea, QApplication, QDialogButtonBox,
+    QFrame, QGridLayout, QHBoxLayout, QHeaderView,
+    QLabel, QLayout, QLineEdit, QMainWindow,
+    QMenu, QMenuBar, QPushButton, QSizePolicy,
+    QSpacerItem, QStackedWidget, QStatusBar, QTableWidget,
+    QTableWidgetItem, QVBoxLayout, QWidget)
 import resources_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1249, 797)
+        MainWindow.resize(1145, 803)
         MainWindow.setStyleSheet(u"*{\n"
 "  border: none;\n"
 "  background-color: transparent;\n"
@@ -74,6 +75,8 @@ class Ui_MainWindow(object):
 "#LeftMenuSubContainer  #menuClose:hover{\n"
 "	background-color: red;\n"
 "}\n"
+"\n"
+"#tableWidget::item { padding: 20px }\n"
 "")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -151,7 +154,7 @@ class Ui_MainWindow(object):
         self.menuFrame.setFrameShadow(QFrame.Raised)
         self.verticalLayout_3 = QVBoxLayout(self.menuFrame)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_3.setContentsMargins(0, 7, 0, 0)
 
         self.verticalLayout_2.addWidget(self.menuFrame)
 
@@ -161,7 +164,7 @@ class Ui_MainWindow(object):
         self.portFolioBtnFrame.setFrameShadow(QFrame.Raised)
         self.verticalLayout_4 = QVBoxLayout(self.portFolioBtnFrame)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.verticalLayout_4.setContentsMargins(30, 0, 30, -1)
+        self.verticalLayout_4.setContentsMargins(30, 5, 30, -1)
         self.portfolioBtn = QPushButton(self.portFolioBtnFrame)
         self.portfolioBtn.setObjectName(u"portfolioBtn")
         icon1 = QIcon()
@@ -250,6 +253,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.tableContainer = QWidget(self.MainBodyContainer)
         self.tableContainer.setObjectName(u"tableContainer")
+        self.tableContainer.setStyleSheet(u"QTableWidget::item { height: 40px; }")
         self.verticalLayout_7 = QVBoxLayout(self.tableContainer)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
@@ -324,7 +328,7 @@ class Ui_MainWindow(object):
         self.frame_pages.setFrameShadow(QFrame.Raised)
         self.verticalLayout_8 = QVBoxLayout(self.frame_pages)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
-        self.verticalLayout_8.setContentsMargins(5, 0, 5, 0)
+        self.verticalLayout_8.setContentsMargins(5, 5, 5, 0)
         self.stackedWidget = QStackedWidget(self.frame_pages)
         self.stackedWidget.setObjectName(u"stackedWidget")
         self.portfolio_page = QWidget()
@@ -381,10 +385,12 @@ class Ui_MainWindow(object):
         sizePolicy7.setVerticalStretch(0)
         sizePolicy7.setHeightForWidth(self.tableWidget.sizePolicy().hasHeightForWidth())
         self.tableWidget.setSizePolicy(sizePolicy7)
+        self.tableWidget.setStyleSheet(u"")
         self.tableWidget.setFrameShadow(QFrame.Raised)
         self.tableWidget.setMidLineWidth(1)
         self.tableWidget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.tableWidget.setIconSize(QSize(12, 12))
+        self.tableWidget.setCornerButtonEnabled(True)
         self.tableWidget.horizontalHeader().setCascadingSectionResizes(False)
         self.tableWidget.horizontalHeader().setMinimumSectionSize(40)
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
@@ -399,11 +405,19 @@ class Ui_MainWindow(object):
         self.stackedWidget.addWidget(self.portfolio_page)
         self.setting_page = QWidget()
         self.setting_page.setObjectName(u"setting_page")
+        sizePolicy7.setHeightForWidth(self.setting_page.sizePolicy().hasHeightForWidth())
+        self.setting_page.setSizePolicy(sizePolicy7)
+        self.setting_page.setMaximumSize(QSize(16777215, 16777215))
+        self.verticalLayout_15 = QVBoxLayout(self.setting_page)
+        self.verticalLayout_15.setObjectName(u"verticalLayout_15")
+        self.verticalLayout_15.setContentsMargins(0, 0, 0, 0)
         self.setting_frame = QFrame(self.setting_page)
         self.setting_frame.setObjectName(u"setting_frame")
-        self.setting_frame.setGeometry(QRect(0, 0, 861, 651))
-        sizePolicy6.setHeightForWidth(self.setting_frame.sizePolicy().hasHeightForWidth())
-        self.setting_frame.setSizePolicy(sizePolicy6)
+        sizePolicy8 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy8.setHorizontalStretch(1)
+        sizePolicy8.setVerticalStretch(1)
+        sizePolicy8.setHeightForWidth(self.setting_frame.sizePolicy().hasHeightForWidth())
+        self.setting_frame.setSizePolicy(sizePolicy8)
         self.setting_frame.setMinimumSize(QSize(0, 0))
         self.setting_frame.setMaximumSize(QSize(16777215, 16777215))
         self.setting_frame.setFrameShape(QFrame.StyledPanel)
@@ -411,17 +425,124 @@ class Ui_MainWindow(object):
         self.verticalLayout_11 = QVBoxLayout(self.setting_frame)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
         self.verticalLayout_11.setContentsMargins(0, 0, 0, 0)
-        self.pushButton = QPushButton(self.setting_frame)
-        self.pushButton.setObjectName(u"pushButton")
+        self.gridFrame = QFrame(self.setting_frame)
+        self.gridFrame.setObjectName(u"gridFrame")
+        self.gridFrame.setStyleSheet(u"QLineEdit { border-radius: 5px; }\n"
+"\n"
+"QPushButton{\n"
+"background-color: #008B8B;\n"
+"border: 1px solid #c9c9c9;\n"
+" border-radius: 3px;\n"
+"padding: 5px;\n"
+" margin-right: 5px;}")
+        self.gridFrame.setFrameShape(QFrame.StyledPanel)
+        self.gridFrame.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_14 = QVBoxLayout(self.gridFrame)
+        self.verticalLayout_14.setObjectName(u"verticalLayout_14")
+        self.label = QLabel(self.gridFrame)
+        self.label.setObjectName(u"label")
+        font = QFont()
+        font.setPointSize(25)
+        font.setBold(True)
+        font.setUnderline(False)
+        font.setStrikeOut(False)
+        font.setKerning(True)
+        self.label.setFont(font)
 
-        self.verticalLayout_11.addWidget(self.pushButton)
+        self.verticalLayout_14.addWidget(self.label, 0, Qt.AlignHCenter)
+
+        self.frame = QFrame(self.gridFrame)
+        self.frame.setObjectName(u"frame")
+        sizePolicy7.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
+        self.frame.setSizePolicy(sizePolicy7)
+        self.frame.setMaximumSize(QSize(1000, 16777215))
+        self.frame.setFrameShape(QFrame.StyledPanel)
+        self.frame.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_8 = QHBoxLayout(self.frame)
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+
+        self.verticalLayout_14.addWidget(self.frame, 0, Qt.AlignVCenter)
+
+        self.gridLayout = QGridLayout()
+        self.gridLayout.setSpacing(20)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setSizeConstraint(QLayout.SetNoConstraint)
+        self.gridLayout.setContentsMargins(10, 20, 10, 10)
+        self.sumUpColumnsLineEdit = QLineEdit(self.gridFrame)
+        self.sumUpColumnsLineEdit.setObjectName(u"sumUpColumnsLineEdit")
+        self.sumUpColumnsLineEdit.setMaximumSize(QSize(500, 16777215))
+
+        self.gridLayout.addWidget(self.sumUpColumnsLineEdit, 2, 1, 1, 1)
+
+        self.amountColumnsLabel = QLabel(self.gridFrame)
+        self.amountColumnsLabel.setObjectName(u"amountColumnsLabel")
+        font1 = QFont()
+        font1.setPointSize(14)
+        font1.setBold(True)
+        self.amountColumnsLabel.setFont(font1)
+
+        self.gridLayout.addWidget(self.amountColumnsLabel, 0, 0, 1, 1, Qt.AlignRight)
+
+        self.hiddenColumnsLabel = QLabel(self.gridFrame)
+        self.hiddenColumnsLabel.setObjectName(u"hiddenColumnsLabel")
+        self.hiddenColumnsLabel.setFont(font1)
+
+        self.gridLayout.addWidget(self.hiddenColumnsLabel, 1, 0, 1, 1, Qt.AlignRight)
+
+        self.amountColumnsLineEdit = QLineEdit(self.gridFrame)
+        self.amountColumnsLineEdit.setObjectName(u"amountColumnsLineEdit")
+        sizePolicy2.setHeightForWidth(self.amountColumnsLineEdit.sizePolicy().hasHeightForWidth())
+        self.amountColumnsLineEdit.setSizePolicy(sizePolicy2)
+        self.amountColumnsLineEdit.setMaximumSize(QSize(500, 18))
+
+        self.gridLayout.addWidget(self.amountColumnsLineEdit, 0, 1, 1, 1)
+
+        self.hiddenColumnsLineEdit = QLineEdit(self.gridFrame)
+        self.hiddenColumnsLineEdit.setObjectName(u"hiddenColumnsLineEdit")
+        self.hiddenColumnsLineEdit.setMaximumSize(QSize(500, 16777215))
+
+        self.gridLayout.addWidget(self.hiddenColumnsLineEdit, 1, 1, 1, 1)
+
+        self.label_2 = QLabel(self.gridFrame)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setFont(font1)
+
+        self.gridLayout.addWidget(self.label_2, 2, 0, 1, 1, Qt.AlignRight)
+
+
+        self.verticalLayout_14.addLayout(self.gridLayout)
+
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout_14.addItem(self.verticalSpacer)
+
+        self.buttonBox = QDialogButtonBox(self.gridFrame)
+        self.buttonBox.setObjectName(u"buttonBox")
+        self.buttonBox.setAutoFillBackground(False)
+        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Save)
+        self.buttonBox.setCenterButtons(False)
+
+        self.verticalLayout_14.addWidget(self.buttonBox, 0, Qt.AlignHCenter)
+
+        self.verticalLayout_14.setStretch(2, 1)
+        self.verticalLayout_14.setStretch(3, 1)
+        self.verticalLayout_14.setStretch(4, 1)
+
+        self.verticalLayout_11.addWidget(self.gridFrame)
+
+
+        self.verticalLayout_15.addWidget(self.setting_frame)
 
         self.stackedWidget.addWidget(self.setting_page)
         self.help_page = QWidget()
         self.help_page.setObjectName(u"help_page")
+        sizePolicy7.setHeightForWidth(self.help_page.sizePolicy().hasHeightForWidth())
+        self.help_page.setSizePolicy(sizePolicy7)
+        self.verticalLayout = QVBoxLayout(self.help_page)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.help_frame = QFrame(self.help_page)
         self.help_frame.setObjectName(u"help_frame")
-        self.help_frame.setGeometry(QRect(0, 0, 1051, 671))
         sizePolicy6.setHeightForWidth(self.help_frame.sizePolicy().hasHeightForWidth())
         self.help_frame.setSizePolicy(sizePolicy6)
         self.help_frame.setFrameShape(QFrame.StyledPanel)
@@ -433,6 +554,9 @@ class Ui_MainWindow(object):
         self.pushButton_2.setObjectName(u"pushButton_2")
 
         self.verticalLayout_12.addWidget(self.pushButton_2)
+
+
+        self.verticalLayout.addWidget(self.help_frame)
 
         self.stackedWidget.addWidget(self.help_page)
 
@@ -452,7 +576,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1249, 21))
+        self.menubar.setGeometry(QRect(0, 0, 1145, 21))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         MainWindow.setMenuBar(self.menubar)
@@ -464,7 +588,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -519,7 +643,10 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem12.setText(QCoreApplication.translate("MainWindow", u"1324erdfsdafdsvfvafdvdfv fd vdf ", None));
         self.tableWidget.setSortingEnabled(__sortingEnabled)
 
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"settings push button", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
+        self.amountColumnsLabel.setText(QCoreApplication.translate("MainWindow", u"Amount Columns", None))
+        self.hiddenColumnsLabel.setText(QCoreApplication.translate("MainWindow", u"Hidden Columns", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"SumUp Columns", None))
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"help push button", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
     # retranslateUi

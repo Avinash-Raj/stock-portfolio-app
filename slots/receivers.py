@@ -9,7 +9,6 @@ def on_open_menu_button_press(self):
     """
     Runs upon clicking sidebar open button.
     """
-
     start_width = 0
     end_width = self.sidebar_width
     self.sidebar_animation.setStartValue(start_width)
@@ -57,12 +56,16 @@ def show_or_hide_stock_buttons(self, show=True):
     """
     Show/hide stock buttons such as refresh button and stock add button.
     """
+    # if show:
+    #     self.ui.refreshBtn.show()
+    #     self.ui.addBtn.show()
+    # else:
+    #     self.ui.refreshBtn.hide()
+    #     self.ui.addBtn.hide()
     if show:
-        self.ui.refreshBtn.show()
-        self.ui.addBtn.show()
+        self.ui.topBarLeftFrame.setEnabled(True)
     else:
-        self.ui.refreshBtn.hide()
-        self.ui.addBtn.hide()
+        self.ui.topBarLeftFrame.setEnabled(False)
 
 
 @Slot()

@@ -125,7 +125,7 @@ class StockPortfolioTableView(BaseTableView):
 
     @Slot()
     def on_refresh_menu_triggered(self):
-        refresh_stocks_slot(self.parent_widget, self.parent_widget.after_stock_refresh)
+        refresh_stocks_slot(self.parent_widget, self.reload_table())
 
     @Slot()
     def on_delete_menu_triggered(self) -> None:

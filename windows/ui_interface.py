@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'interfaceIVNkhc.ui'
+## Form generated from reading UI file 'interfaceVwrrmu.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.4.3
 ##
@@ -77,6 +77,16 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "#tableWidget::item { padding: 20px }\n"
+"\n"
+"\n"
+"QLineEdit:focus {"
+                        "\n"
+"            border: 1px solid #008B8B;\n"
+"            border-radius: 5px;\n"
+"            padding: 2px;\n"
+"            outline: none;\n"
+"          \n"
+"        }\n"
 "")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -154,7 +164,7 @@ class Ui_MainWindow(object):
         self.menuFrame.setFrameShadow(QFrame.Raised)
         self.verticalLayout_3 = QVBoxLayout(self.menuFrame)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.verticalLayout_3.setContentsMargins(0, 7, 0, 0)
+        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
 
         self.verticalLayout_2.addWidget(self.menuFrame)
 
@@ -259,6 +269,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
         self.topBarFrame = QFrame(self.tableContainer)
         self.topBarFrame.setObjectName(u"topBarFrame")
+        sizePolicy4.setHeightForWidth(self.topBarFrame.sizePolicy().hasHeightForWidth())
+        self.topBarFrame.setSizePolicy(sizePolicy4)
         self.topBarFrame.setMaximumSize(QSize(16777215, 16777215))
         self.topBarFrame.setFrameShape(QFrame.StyledPanel)
         self.topBarFrame.setFrameShadow(QFrame.Raised)
@@ -269,7 +281,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.setSpacing(-1)
 #endif
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.horizontalLayout_4.setContentsMargins(-1, 12, 12, 12)
+        self.horizontalLayout_4.setContentsMargins(12, 12, 12, 12)
         self.topBarRightFrame = QFrame(self.topBarFrame)
         self.topBarRightFrame.setObjectName(u"topBarRightFrame")
         self.topBarRightFrame.setFrameShape(QFrame.StyledPanel)
@@ -292,6 +304,7 @@ class Ui_MainWindow(object):
 
         self.topBarLeftFrame = QFrame(self.topBarFrame)
         self.topBarLeftFrame.setObjectName(u"topBarLeftFrame")
+        self.topBarLeftFrame.setEnabled(True)
         self.topBarLeftFrame.setFrameShape(QFrame.StyledPanel)
         self.topBarLeftFrame.setFrameShadow(QFrame.Raised)
         self.horizontalLayout_5 = QHBoxLayout(self.topBarLeftFrame)
@@ -328,7 +341,7 @@ class Ui_MainWindow(object):
         self.frame_pages.setFrameShadow(QFrame.Raised)
         self.verticalLayout_8 = QVBoxLayout(self.frame_pages)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
-        self.verticalLayout_8.setContentsMargins(5, 5, 5, 0)
+        self.verticalLayout_8.setContentsMargins(0, 0, 5, 0)
         self.stackedWidget = QStackedWidget(self.frame_pages)
         self.stackedWidget.setObjectName(u"stackedWidget")
         self.portfolio_page = QWidget()
@@ -474,34 +487,34 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.sumUpColumnsLineEdit, 2, 1, 1, 1)
 
-        self.amountColumnsLabel = QLabel(self.gridFrame)
-        self.amountColumnsLabel.setObjectName(u"amountColumnsLabel")
+        self.localCurrencyLabel = QLabel(self.gridFrame)
+        self.localCurrencyLabel.setObjectName(u"localCurrencyLabel")
         font1 = QFont()
         font1.setPointSize(14)
         font1.setBold(True)
-        self.amountColumnsLabel.setFont(font1)
+        self.localCurrencyLabel.setFont(font1)
 
-        self.gridLayout.addWidget(self.amountColumnsLabel, 0, 0, 1, 1, Qt.AlignRight)
+        self.gridLayout.addWidget(self.localCurrencyLabel, 0, 0, 1, 1, Qt.AlignRight)
 
-        self.hiddenColumnsLabel = QLabel(self.gridFrame)
-        self.hiddenColumnsLabel.setObjectName(u"hiddenColumnsLabel")
-        self.hiddenColumnsLabel.setFont(font1)
+        self.columnsToConvertLabel = QLabel(self.gridFrame)
+        self.columnsToConvertLabel.setObjectName(u"columnsToConvertLabel")
+        self.columnsToConvertLabel.setFont(font1)
 
-        self.gridLayout.addWidget(self.hiddenColumnsLabel, 1, 0, 1, 1, Qt.AlignRight)
+        self.gridLayout.addWidget(self.columnsToConvertLabel, 1, 0, 1, 1, Qt.AlignRight)
 
-        self.amountColumnsLineEdit = QLineEdit(self.gridFrame)
-        self.amountColumnsLineEdit.setObjectName(u"amountColumnsLineEdit")
-        sizePolicy2.setHeightForWidth(self.amountColumnsLineEdit.sizePolicy().hasHeightForWidth())
-        self.amountColumnsLineEdit.setSizePolicy(sizePolicy2)
-        self.amountColumnsLineEdit.setMaximumSize(QSize(500, 18))
+        self.localCurrencyLineEdit = QLineEdit(self.gridFrame)
+        self.localCurrencyLineEdit.setObjectName(u"localCurrencyLineEdit")
+        sizePolicy2.setHeightForWidth(self.localCurrencyLineEdit.sizePolicy().hasHeightForWidth())
+        self.localCurrencyLineEdit.setSizePolicy(sizePolicy2)
+        self.localCurrencyLineEdit.setMaximumSize(QSize(500, 18))
 
-        self.gridLayout.addWidget(self.amountColumnsLineEdit, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.localCurrencyLineEdit, 0, 1, 1, 1)
 
-        self.hiddenColumnsLineEdit = QLineEdit(self.gridFrame)
-        self.hiddenColumnsLineEdit.setObjectName(u"hiddenColumnsLineEdit")
-        self.hiddenColumnsLineEdit.setMaximumSize(QSize(500, 16777215))
+        self.columnsToConvertLineEdit = QLineEdit(self.gridFrame)
+        self.columnsToConvertLineEdit.setObjectName(u"columnsToConvertLineEdit")
+        self.columnsToConvertLineEdit.setMaximumSize(QSize(500, 16777215))
 
-        self.gridLayout.addWidget(self.hiddenColumnsLineEdit, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.columnsToConvertLineEdit, 1, 1, 1, 1)
 
         self.label_2 = QLabel(self.gridFrame)
         self.label_2.setObjectName(u"label_2")
@@ -519,6 +532,9 @@ class Ui_MainWindow(object):
         self.buttonBox = QDialogButtonBox(self.gridFrame)
         self.buttonBox.setObjectName(u"buttonBox")
         self.buttonBox.setAutoFillBackground(False)
+        self.buttonBox.setStyleSheet(u"\n"
+"\n"
+"* { button-layout: 1 }")
         self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Save)
         self.buttonBox.setCenterButtons(False)
 
@@ -644,8 +660,8 @@ class Ui_MainWindow(object):
         self.tableWidget.setSortingEnabled(__sortingEnabled)
 
         self.label.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
-        self.amountColumnsLabel.setText(QCoreApplication.translate("MainWindow", u"Amount Columns", None))
-        self.hiddenColumnsLabel.setText(QCoreApplication.translate("MainWindow", u"Hidden Columns", None))
+        self.localCurrencyLabel.setText(QCoreApplication.translate("MainWindow", u"Local Currency", None))
+        self.columnsToConvertLabel.setText(QCoreApplication.translate("MainWindow", u"Columns to Convert", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"SumUp Columns", None))
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"help push button", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))

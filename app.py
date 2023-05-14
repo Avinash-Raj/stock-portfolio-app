@@ -1,11 +1,10 @@
-from PySide6.QtWidgets import QApplication, QStyleFactory
-
-from windows.stock import MainWindow
-from utils.logging import setup_logging
-from themes import darkPalette
-
 import sys
 
+from PySide6.QtWidgets import QApplication, QStyleFactory
+
+from themes import darkPalette
+from utils.logging import setup_logging
+from windows.main import MainWindow
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

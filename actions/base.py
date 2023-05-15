@@ -21,5 +21,5 @@ class SpinnerBase(ABC):
         self.spinner = Spinner(self.parent)
 
     @abstractmethod
-    def perform(self, *args, **kwargs):
+    def perform(self, thread=None):
         pass

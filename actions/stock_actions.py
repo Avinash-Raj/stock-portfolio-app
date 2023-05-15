@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Optional, Tuple
 
 from actions import SpinnerBase
-from models import DB_NAME, StockModelController
+from models import DB_NAME, SettingsModelController, StockModelController
 from widgets.spinner import SpinningThread, spinning
 
 
@@ -20,3 +20,14 @@ class RefreshStockAction(SpinnerBase):
     def perform(self, thread: Optional[SpinningThread] = None) -> Tuple[bool, str]:
         controller = StockModelController(thread.db)
         return controller.refresh_stocks()
+
+
+@dataclass
+class AddSettingsAction(SpinnerBase):
+    @spinning(db_name=DB_NAME)
+    def perform(self, *args, thread: Optional[SpinningThread] = None, **kwargs) -> Tuple[bool, str]:
+        controller = SettingsModelController(thread.db if thread else None)
+        status = controller.add_or_update_setting(*args, **kwargs)
+        if status:
+            return status, ""
+        return status, thread.db.lastError().text()

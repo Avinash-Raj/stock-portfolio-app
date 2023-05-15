@@ -1,6 +1,6 @@
 from PySide6.QtCore import Slot
 
-from actions.stock_actions import AddStockAction, RefreshStockAction
+from actions.stock_actions import AddSettingsAction, AddStockAction, RefreshStockAction
 from themes.colors import *
 
 
@@ -99,3 +99,9 @@ def add_stock_slot(self, symbol, price, quantity, callback):
 def refresh_stocks_slot(self, callback):
     action = RefreshStockAction(self, callback=callback)
     action.perform()
+
+
+@Slot(object, str, str, object)
+def add_settings_slot(self, local_currency, columns_to_convert, callback):
+    action = AddSettingsAction(self, callback=callback)
+    action.perform(local_currency, columns_to_convert)

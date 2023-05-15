@@ -1,16 +1,22 @@
+from __future__ import annotations
+
 import logging
+from typing import TYPE_CHECKING
 
 from PySide6.QtCore import QObject, Signal
-from PySide6.QtWidgets import QHeaderView, QMainWindow
+from PySide6.QtWidgets import QHeaderView
 
 from slots.receivers import refresh_stocks_slot
 from views.table import StockPortfolioTableView
+
+if TYPE_CHECKING:
+    from windows.main import MainWindow
 
 
 class StockPage(QObject):
     refresh_stocks_signal = Signal()
 
-    def __init__(self, main_window: QMainWindow) -> None:
+    def __init__(self, main_window: MainWindow) -> None:
         super().__init__()
         self.main_window = main_window
         self.setup_table()

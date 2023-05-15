@@ -7,7 +7,8 @@ from PySide6.QtSql import QSqlDatabase
 from entities import StockItem
 from utils.helpers import create_stock_item, update_stock_info
 
-from .model import StockModel
+from .model import SettingsModel, StockModel
+from .model_utils import QSqlRecordToDict
 
 
 class StockModelController:
@@ -60,7 +61,7 @@ class StockModelController:
             record.setValue(name, value)
         # clear filter
         self.model.setFilter("")
-        return self.model.updateRow(row_index=row_id, record=record)
+        return self.model.updateRowInTable(row_id, record)
 
     def remove_stock_item(self, symbol) -> bool:
         # filter the table by sumbol
@@ -101,3 +102,24 @@ class StockModelController:
             else:
                 logging.debug(f"Stock id {row_id} updated successfully.")
         return status, error
+
+
+class SettingsModelController:
+    """
+    DB Settings Controller
+    This class does the interaction with the Settings DB Model.
+    """
+
+    def __init__(self, db: Optional[QSqlDatabase] = None):
+        self.model = SettingsModel(db)
+
+    def add_or_update_setting(self, local_currency: str, columns_to_convert: str) -> bool:
+        print(local_currency, columns_to_convert)
+        data = {"local_currency": local_currency, "columns_to_convert": columns_to_convert}
+        return self.model.createOrUpdateRecord(data=data)
+
+    def get_settings(self) -> Dict[Any, Any]:
+        record = self.model.selectFirstRecord()
+        if not record:
+            return {}
+        return QSqlRecordToDict(record)

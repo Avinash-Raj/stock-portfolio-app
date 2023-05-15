@@ -206,3 +206,51 @@ class StockModelWithFooter(StockModel):
             return date_time.replace("T", " ").replace("Z", "")
 
         return super().data(index, role)
+
+
+class SettingsModel(QSqlTableModel):
+    def __init__(self, db=None):
+        if db:
+            super().__init__(db=db)
+        else:
+            super().__init__()
+        self.setTable("settings")  # Set the table name here
+        self.select()
+
+    def createOrUpdateRecord(self, data) -> bool:
+        # Check if a record already exists
+        if self.rowCount() > 0:
+            return self.updateData(0, data)  # Update the first record
+
+        return self.insertData(data)  # Insert a new record
+
+    def selectFirstRecord(self) -> Optional[QSqlRecord]:
+        # Select only the first record
+        self.setFilter("")  # Clear any existing filter
+        self.select()
+        if self.rowCount() > 0:
+            return self.record(0)  # Return the first record
+        return None
+
+    def insertData(self, data) -> bool:
+        # Insert a new record with the provided data
+        self.insertRow(self.rowCount())
+        for column, value in data.items():
+            column_id = self.fieldIndex(column)
+            self.setData(self.index(self.rowCount() - 1, column_id), value, Qt.ItemDataRole.EditRole)
+
+        # Submit the changes to the database
+        return self.submitAll()
+
+    def updateData(self, row, data) -> bool:
+        # Update the specified row with the provided data
+        print(f"Gonna update {row}")
+        record: Optional[QSqlRecord] = self.selectFirstRecord()
+        if not record:
+            return False
+        for column, value in data.items():
+            column_id = self.fieldIndex(column)
+            record.setValue(column_id, value)
+        self.updateRowInTable(row, record)
+        # Submit the changes to the database
+        return self.submitAll()

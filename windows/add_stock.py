@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QDialog
 
 from slots.receivers import add_stock_slot
 from utils.validators import is_valid_stock_symbol
-from windows.messages import show_error_message
+from widgets.messages import show_error_message
 from windows.ui_add_stock_dialog import Ui_Dialog as Ui_AddDialog
 
 
@@ -65,12 +65,14 @@ class AddStockDialog(QDialog):
                 values[name.lower()] = field_text
 
         if errors:
-            return False, "\n".join(errors)
+            show_error_message("\n".join(errors), self)
+            return False
 
         symbol = values["name"]
         # check for stock symbol valid
         if not is_valid_stock_symbol(symbol):
-            return False, f'Invalid Stock Symbol "{symbol}"'
+            show_error_message(f'Invalid Stock Symbol "{symbol}"', self)
+            return False
 
         # add row
         price, quantity = float(values["price"]), int(values["shares"])

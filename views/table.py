@@ -25,8 +25,8 @@ from PySide6.QtWidgets import (
     QTableView,
 )
 
-from entities.classes import CURRENCIES
-from models import StockModelController, StockModelWithFooter
+from entities.classes import CURRENCIES, Amount, ConversionRate
+from models import SettingsModelController, StockModelController, StockModelWithFooter
 from settings import (
     PORTFOLIO_TABLE_AMOUNT_COLUMN_NAMES,
     PORTFOLIO_TABLE_COLUMN_NAMES_TO_HIDE,
@@ -202,6 +202,12 @@ class StockPortfolioTableView(BaseTableView):
         row_count = model.rowCount()
         column_count = model.columnCount()
         data: Dict[int, list] = defaultdict(list)
+        settings: Dict[str, str] = SettingsModelController().get_settings()
+        local_currency, columns_to_convert = settings.get("local_currency"), settings.get("columns_to_convert")
+        local_currency_symbol = ""
+        conversion_rates: Dict[str, ConversionRate] = {}
+        if local_currency:
+            local_currency_symbol = CURRENCIES[local_currency].symbol
 
         for i in range(column_count):
             # Set header data for QStandardItemModel
@@ -210,6 +216,7 @@ class StockPortfolioTableView(BaseTableView):
             is_amount_column = bool(i in amount_column_indexes)
             is_gain_column = i == model.fieldIndex("gain")
             is_sumup_column_index = bool(i in sumup_column_indexes)
+            column_name = model.headerData(i, Qt.Orientation.Horizontal, Qt.ItemDataRole.EditRole)
 
             for j in range(row_count):
                 if j + 1 == row_count:
@@ -222,7 +229,10 @@ class StockPortfolioTableView(BaseTableView):
                     elif is_sumup_column_index:
                         # column to sumup
                         cell_text = self.get_column_sum(data[i])
-                        item = self.get_standard_item(f"$ {cell_text:.2f}", font=QFont("Arial", 20, QFont.Weight.Bold))
+                        item = self.get_standard_item(
+                            f"{local_currency_symbol if column_name in columns_to_convert else '$'} {cell_text:,.2f}",
+                            font=QFont("Arial", 20, QFont.Weight.Bold),
+                        )
                     # apply bg color for gain column
                     if is_gain_column:
                         gain_data = item.data(Qt.ItemDataRole.DisplayRole)
@@ -234,13 +244,40 @@ class StockPortfolioTableView(BaseTableView):
                     standard_model.setItem(j, i, item)
                     continue
                 value = model.data(model.index(j, i))
-                data[i].append(value)
+
                 preceeding_text = ""
                 if is_amount_column:
                     currency_code = model.data(model.index(j, model.fieldIndex("currency")))
-                    if currency_code:
+
+                    # check for existence of local currency
+                    # if yes then convert appropriate column values to local currency
+                    if local_currency and column_name in columns_to_convert and currency_code != local_currency:
+                        # get or set conversion rate
+                        currency_pair = f"{currency_code}_{local_currency}"
+                        conversion_rate = conversion_rates.get(currency_pair)
+                        if not conversion_rate:
+                            conversion_rate = ConversionRate(currency_code, local_currency)
+                            conversion_rates[currency_pair] = conversion_rate
+                        # convert the value to local currency
+                        converted_amount = conversion_rate.convert(value)
+
+                        data[i].append(converted_amount)
+                        # rounded upto 2 decimal places
+                        value = f"{converted_amount:,.2f}"
+                        preceeding_text = f"{local_currency_symbol} "
+                    elif currency_code:
                         currency_symbol = CURRENCIES[currency_code].symbol
                         preceeding_text = f"{currency_symbol} "
+                        data[i].append(value)
+                        # round the value for display
+                        value = f"{value:,.2f}"
+                    else:
+                        data[i].append(value)
+                        # round the value for display
+                        value = f"{value:,.2f}"
+                else:
+                    data[i].append(value)
+
                 value = f"{preceeding_text}{value}"
 
                 item = self.get_standard_item(value)

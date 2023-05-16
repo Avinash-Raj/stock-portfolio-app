@@ -12,7 +12,7 @@ PySide6-Addons = "6.5.0"
 PySide6-Essentials = "6.5.0"
 QT-PyQt-PySide-Custom-Widgets = "0.6.4"
 yfinance = "^0.2.18"
-forex-python = "^1.8"
+CurrencyConverter = "^0.17.7"
 
 [tool.poetry.dev-dependencies]
 black = "^23.3.0"

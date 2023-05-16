@@ -45,6 +45,8 @@ class MainWindow(QMainWindow):
         self.ui.helpBtn.clicked.connect(lambda: open_help_page(self))
         # upon clicking cancel button on settings page
         self.ui.buttonBox.rejected.connect(lambda: open_portfolio_page(self))
+        # reload table upon settings updation
+        self.settings_page.settings_added_signal.connect(lambda: self.stock_page.table_view.reload_table())
 
     def setup_animation(self, widget: QWidget):
         """

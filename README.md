@@ -1,8 +1,9 @@
 ## Stock Portfolio App
 
-This is a simple PyQt6 application that allows users to keep track of the stocks they own and their performance.
+This is a simple PyQt6/PySide6 application that allows users to keep track of the stocks they own and their performance.
 
 #### Features
+
 [-] Add new stocks to your portfolio
 [-] Edit the details of existing stocks
 [-] Delete stocks that you no longer own
@@ -22,19 +23,23 @@ Install the required dependencies:
 
 To run the application, simply execute the following command:
 
-    $ python create_db.py # creates a new database with stocks table.
+    $ python migrations.py # creates a new database with stocks table.
     $ python app.py
 
 #### Contributing
+
 Contributions are always welcome! If you would like to contribute to the project, please submit a pull request.
 
 #### License
+
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 #### Credits
+
 The following third-party libraries were used in this project:
 
     PyQt6
+    PySide6
     yfinance
     sqlite3
 

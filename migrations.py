@@ -1,10 +1,13 @@
+### Migration script which has to run at the start
+### for database creation
+
 import sqlite3
 
 # create a connection to the SQLite database
-conn = sqlite3.connect("example.db")
+conn = sqlite3.connect("stocks.db")
 
 
-def create_table(conn):
+def create_stocks_table(conn):
     # create a new table with columns
     # create a cursor object
     cursor = conn.cursor()
@@ -27,7 +30,7 @@ def create_table(conn):
     conn.close()
 
 
-def add_columns(conn):
+def alter_stocks_table(conn):
     c = conn.cursor()
 
     # Add columns to the stocks table
@@ -40,8 +43,8 @@ def add_columns(conn):
     conn.close()
 
 
-# create_table(conn)
-# add_columns(conn)
+create_stocks_table(conn)
+alter_stocks_table(conn)
 
 
 def create_settings_table(conn):

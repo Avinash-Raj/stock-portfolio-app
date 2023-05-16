@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import Union
 
-from forex_python.converter import CurrencyRates
+from currency_converter import CurrencyConverter
 
 
 @dataclass
@@ -19,10 +19,6 @@ class StockItem:
     market_value: float
     gain: float
 
-    # def __init__(self, **kwargs):
-    #     expected_args = set(vars(self))  # get the expected arguments
-    #     valid_kwargs = {k: v for k, v in kwargs.items() if k in expected_args}  # filter out any unexpected arguments
-    #     vars(self).update(valid_kwargs)
     def __init__(
         self, symbol, price_paid, shares, name, price, currency, cost_basis, market_value, gain, *args, **kwargs
     ):
@@ -51,7 +47,7 @@ class Currency:
         return f"Currency('{self.code}', '{self.symbol}')"
 
 
-CURRENCIES = {"USD": Currency("USD", "$"), "INR": Currency("INR", "₹")}
+CURRENCIES = {"USD": Currency("USD", "$"), "INR": Currency("INR", "₹"), "EUR": Currency("EUR", "€")}
 
 
 @dataclass
@@ -61,11 +57,25 @@ class Amount:
     price: Union[int, float, Decimal]
     currency: Currency = CURRENCIES["USD"]
 
-    def convert_to(self, to_currency: Union[Currency, str]) -> "Amount":
-        currency_rate = CurrencyRates(force_decimal=True)
-        currency = to_currency if isinstance(to_currency, Currency) else CURRENCIES[to_currency]
-        final_amount = currency_rate.convert(self.currency.code, currency.code, self.price)
-        return Amount(price=final_amount, currency=currency)
-
     def __str__(self):
         return f"{self.currency.symbol} {self.price}"
+
+
+@dataclass
+class ConversionRate:
+    from_currency: str
+    to_currency: str
+
+    def __post_init__(self):
+        self.value = self._get_value()
+
+    def _get_value(self):
+        """
+        Conversion rate for 1 dollar if the from_currency = USD.
+        """
+        c = CurrencyConverter()
+        conversion_rate = c.convert(1, self.from_currency, self.to_currency)
+        return conversion_rate
+
+    def convert(self, amount) -> float:
+        return self.value * amount

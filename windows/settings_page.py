@@ -106,5 +106,6 @@ class SettingsPage(QObject):
         """
         if is_success:
             show_success_message("Settings Updated successfully!", self.main_window)
+            self.settings_added_signal.emit(True)
         else:
             show_error_message(error, self.main_window)

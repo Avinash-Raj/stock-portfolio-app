@@ -1,5 +1,6 @@
 import logging
-from PyQt6 import QtCore
+
+from PySide6 import QtCore
 
 
 def qt_message_handler(mode, context, message):

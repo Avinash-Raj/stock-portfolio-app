@@ -52,7 +52,6 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 The following third-party libraries were used in this project:
 
-    PyQt6
     PySide6
     yfinance
     sqlite3

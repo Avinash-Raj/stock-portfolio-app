@@ -26,8 +26,6 @@ def create_stocks_table(conn):
     )
     # commit the changes to the database
     conn.commit()
-    # close the connection
-    conn.close()
 
 
 def alter_stocks_table(conn):
@@ -40,11 +38,6 @@ def alter_stocks_table(conn):
     c.execute("ALTER TABLE stocks ADD COLUMN dt_created TEXT")
     c.execute("ALTER TABLE stocks ADD COLUMN dt_updated TEXT")
     conn.commit()
-    conn.close()
-
-
-create_stocks_table(conn)
-alter_stocks_table(conn)
 
 
 def create_settings_table(conn):
@@ -58,7 +51,9 @@ def create_settings_table(conn):
         """
     )
     conn.commit()
-    conn.close()
 
 
+create_stocks_table(conn)
+alter_stocks_table(conn)
 create_settings_table(conn)
+conn.close()

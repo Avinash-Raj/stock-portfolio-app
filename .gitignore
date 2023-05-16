@@ -34,3 +34,4 @@ artifacts/
 
 # Git
 .git/
+*.db

@@ -203,7 +203,7 @@ class StockPortfolioTableView(BaseTableView):
         column_count = model.columnCount()
         data: Dict[int, list] = defaultdict(list)
         settings: Dict[str, str] = SettingsModelController().get_settings()
-        local_currency, columns_to_convert = settings.get("local_currency"), settings.get("columns_to_convert")
+        local_currency, columns_to_convert = settings.get("local_currency", ""), settings.get("columns_to_convert", "")
         local_currency_symbol = ""
         conversion_rates: Dict[str, ConversionRate] = {}
         if local_currency:

@@ -6,13 +6,13 @@ authors = ["Avinash <avistylein3105@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "~3.11"
-PyQt6 = "6.5.0"
 PySide6 = "6.5.0"
 PySide6-Addons = "6.5.0"
 PySide6-Essentials = "6.5.0"
 QT-PyQt-PySide-Custom-Widgets = "0.6.4"
 yfinance = "^0.2.18"
 CurrencyConverter = "^0.17.7"
+simplejson = "^3.19.1"
 
 [tool.poetry.dev-dependencies]
 black = "^23.3.0"

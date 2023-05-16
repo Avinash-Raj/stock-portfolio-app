@@ -2,7 +2,7 @@ import sys
 
 from PySide6.QtWidgets import QApplication, QStyleFactory
 
-from themes import darkPalette
+# from themes import darkPalette
 from utils.logging import setup_logging
 from windows.main import MainWindow
 

@@ -21,7 +21,9 @@ https://github.com/Avinash-Raj/stock-portfolio-app/assets/3929632/e313d2e7-f9c2-
 #### Installation
 ---
 
-Clone the repository: git clone https://github.com/Avinash-Raj/stock-portfolio-app.git
+Clone the repository: 
+
+    git clone https://github.com/Avinash-Raj/stock-portfolio-app.git
 
 Use `python version >= 3.11`
 

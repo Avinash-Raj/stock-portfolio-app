@@ -1,8 +1,12 @@
 [tool.poetry]
 name = "my-stocks"
 version = "0.1.0"
-description = ""
+description = "This is a simple PySide6 application that allows users to keep track of the stocks they own and their performance."
 authors = ["Avinash <avistylein3105@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/Avinash-Raj/stock-portfolio-app"
+keywords = ["python", "pyside6", "finance", "GUI", "stocks", "pyqt6"]
 
 [tool.poetry.dependencies]
 python = "~3.11"
@@ -17,6 +21,9 @@ simplejson = "^3.19.1"
 [tool.poetry.dev-dependencies]
 black = "^23.3.0"
 pylint = "^2.17.3"
+
+[tool.poetry.scripts]
+stock_migration_script = "./migrations.py"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -3,9 +3,6 @@
 
 import sqlite3
 
-# create a connection to the SQLite database
-conn = sqlite3.connect("stocks.db")
-
 
 def create_stocks_table(conn):
     # create a new table with columns
@@ -53,7 +50,13 @@ def create_settings_table(conn):
     conn.commit()
 
 
-create_stocks_table(conn)
-alter_stocks_table(conn)
-create_settings_table(conn)
-conn.close()
+def main():
+    # create a connection to the SQLite database
+    conn = sqlite3.connect("stocks.db")
+    create_stocks_table(conn)
+    alter_stocks_table(conn)
+    create_settings_table(conn)
+    conn.close()
+
+
+main()

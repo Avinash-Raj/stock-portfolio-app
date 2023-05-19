@@ -57,5 +57,6 @@ The following third-party libraries were used in this project:
     PySide6
     yfinance
     sqlite3
+    currencyconverter
 
 You can customize this README.md file by replacing the relevant information with your own project details. You might also want to include information about the features you plan to implement in the future, any known issues or limitations, and instructions for running tests or contributing to the project.

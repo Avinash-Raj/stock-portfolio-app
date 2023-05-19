@@ -1,0 +1,57 @@
+*{
+  border: none;
+  background-color: transparent;
+  background: none;
+  padding: 0;
+  margin: 0;
+  color: #fff;
+}
+
+#MainBodyContainer {
+   background-color: #2E2E2E;
+}
+#LeftMenuContainer {
+background-color: #2E2E2E;
+}
+#LeftMenuSubContainer  QPushButton {
+	text-align: left;
+   padding: 5px 10px;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+}
+#LeftMenuSubContainer  QPushButton:hover{
+	background-color: #008B8B;
+}
+#menuFrame {
+  border-bottom: 3px solid #fff;
+}
+
+#setting_frame,#help_frame {
+border: 1px solid #fff;
+}
+
+#topBarLeftFrame, #topBarRightFrame, #addBtn {
+padding: 0px;
+margin: 0px;
+}
+
+#topBarFrame {
+/*border-bottom: 1px solid #fff;*/
+background-color:  #008B8B;
+}
+
+
+#LeftMenuSubContainer  #menuClose:hover{
+	background-color: red;
+}
+
+#tableWidget::item { padding: 20px }
+
+
+QLineEdit:focus {
+  border: 1px solid #008B8B;
+  border-radius: 5px;
+  padding: 2px;
+  outline: none;
+          
+}

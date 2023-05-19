@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "stocks"
+name = "mystocks"
 version = "0.1.0"
 description = "This is a simple PySide6 application that allows users to keep track of the stocks they own and their performance."
 authors = ["Avinash <avistylein3105@gmail.com>"]
@@ -23,8 +23,8 @@ black = "^23.3.0"
 pylint = "^2.17.3"
 
 [tool.poetry.scripts]
-run_migrations = "stocks.db.migrations:main"
-mystocks = "stocks.app:main"
+run_migrations = "mystocks.db.migrations:main"
+mystocks = "mystocks.app:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

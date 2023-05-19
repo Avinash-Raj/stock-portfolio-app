@@ -31,13 +31,22 @@ Install the required dependencies:
 
     poetry install
 
-#### Usage
+#### Build and Run
 ---
 
-To run the application, simply execute the following command:
+Create a virtual environment using python version `>=3.11` and then activate it. 
+Get into the project root directory and then run the below commands for installing mystocks app locally.
 
-    $ python migrations.py # creates a new database with stocks table.
-    $ python app.py
+    $ poetry build
+
+Above command creates a dist directory on the project's root folder along with the `mystocks.tar.gz` package. Now do a pip install.
+
+    $ pip install ./dist/mystocks-0.1.0.tar.gz
+
+Now it's the time to run the app.
+
+    $ run_migrations
+    $ mystocks
 
 #### Contributing
 ---

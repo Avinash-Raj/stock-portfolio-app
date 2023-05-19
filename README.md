@@ -4,7 +4,8 @@ This is a simple PyQt6/PySide6 application that allows users to keep track of th
 
 
 
-https://github.com/Avinash-Raj/stock-portfolio-app/assets/3929632/e313d2e7-f9c2-4b08-ab66-60fd6211b603
+https://github.com/Avinash-Raj/stock-portfolio-app/assets/3929632/a35f7192-e058-46ea-9784-a6420b926ec4
+
 
 
 
